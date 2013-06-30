@@ -34,10 +34,15 @@ import org.weakref.jmx.Managed;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.io.File;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +52,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.String.format;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 public class ServiceInventory
@@ -57,6 +63,7 @@ public class ServiceInventory
     private final URI serviceInventoryUri;
     private final Duration updateInterval;
     private final JsonCodec<ServiceDescriptorsRepresentation> serviceDescriptorsCodec;
+    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     private final ServiceDescriptorsListener discoveryListener;
 
     private final AtomicReference<List<ServiceDescriptor>> serviceDescriptors = new AtomicReference<List<ServiceDescriptor>>(ImmutableList.<ServiceDescriptor>of());
@@ -174,8 +181,19 @@ public class ServiceInventory
             String json = Files.toString(file, Charsets.UTF_8);
             serviceDescriptorsRepresentation = serviceDescriptorsCodec.fromJson(json);
 
+            ImmutableList.Builder<String> errorBuilder = ImmutableList.builder();
+
+            for (ConstraintViolation<ServiceDescriptorsRepresentation> violation : validator.validate(serviceDescriptorsRepresentation)) {
+                errorBuilder.add(violation.getMessage());
+            }
+
             if (!environment.equals(serviceDescriptorsRepresentation.getEnvironment())) {
-                logServerError("Expected environment to be %s, but was %s", environment, serviceDescriptorsRepresentation.getEnvironment());
+                errorBuilder.add(format("Expected environment to be %s, but was %s", environment, serviceDescriptorsRepresentation.getEnvironment()));
+            }
+            ImmutableList<String> errors = errorBuilder.build();
+            if (!errors.isEmpty()) {
+                logServerError(errors);
+                return;
             }
 
             List<ServiceDescriptor> descriptors = newArrayList(serviceDescriptorsRepresentation.getServiceDescriptors());
@@ -199,12 +217,15 @@ public class ServiceInventory
         }
     }
 
-    private void logServerError(String message, Object... args)
+    private void logServerError(Collection<String> errors)
     {
         if (serverUp.compareAndSet(true, false)) {
-            log.error(message, args);
+            for (String error : errors) {
+                log.error(error);
+            }
         }
     }
+
     private void logServerError(Exception e, String message, Object... args)
     {
         if (serverUp.compareAndSet(true, false)) {

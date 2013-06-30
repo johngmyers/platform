@@ -33,6 +33,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 @SuppressWarnings({"unchecked", "deprecation"})
 public class TestServiceInventory
@@ -107,5 +109,92 @@ public class TestServiceInventory
 
         verify(balancer, times(2)).updateHttpUris(captor.capture());
         assertEquals(captor.getValue(), expectedUris);
+    }
+
+    @Test
+    public void testEmptyServiceList()
+            throws Exception
+    {
+        HttpServiceBalancerImpl balancer = mock(HttpServiceBalancerImpl.class);
+        ServiceInventoryConfig serviceInventoryConfig = new ServiceInventoryConfig()
+                .setServiceInventoryUri(Resources.getResource("service-inventory-empty.json").toURI());
+
+        try {
+            ServiceInventory serviceInventory = new ServiceInventory(serviceInventoryConfig,
+                    new DiscoveryClientConfig(),
+                    new NodeInfo("test"),
+                    JsonCodec.jsonCodec(ServiceDescriptorsRepresentation.class),
+                    balancer);
+            fail("RuntimeException expected");
+        }
+        catch (RuntimeException e) {
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptorList: environment is empty"));
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptorList: serviceDescriptors is null"));
+        }
+    }
+
+    @Test
+    public void testInvalidEnvironment()
+            throws Exception
+    {
+        HttpServiceBalancerImpl balancer = mock(HttpServiceBalancerImpl.class);
+        ServiceInventoryConfig serviceInventoryConfig = new ServiceInventoryConfig()
+                .setServiceInventoryUri(Resources.getResource("service-inventory.json").toURI());
+
+        try {
+            ServiceInventory serviceInventory = new ServiceInventory(serviceInventoryConfig,
+                    new DiscoveryClientConfig(),
+                    new NodeInfo("test123"),
+                    JsonCodec.jsonCodec(ServiceDescriptorsRepresentation.class),
+                    balancer);
+            fail("RuntimeException expected");
+        }
+        catch (RuntimeException e) {
+            assertTrue(e.getMessage().contains("Expected service inventory environment to be test123, but was test"));
+        }
+    }
+
+    @Test
+    public void testInvalidDescriptors()
+            throws Exception
+    {
+        HttpServiceBalancerImpl balancer = mock(HttpServiceBalancerImpl.class);
+        ServiceInventoryConfig serviceInventoryConfig = new ServiceInventoryConfig()
+                .setServiceInventoryUri(Resources.getResource("service-inventory-invalid.json").toURI());
+
+        try {
+            ServiceInventory serviceInventory = new ServiceInventory(serviceInventoryConfig,
+                    new DiscoveryClientConfig(),
+                    new NodeInfo("test"),
+                    JsonCodec.jsonCodec(ServiceDescriptorsRepresentation.class),
+                    balancer);
+            fail("RuntimeException expected");
+        }
+        catch (RuntimeException e) {
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptor: id is null"));
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptor: nodeId is null ServiceDescriptorRepresentation{id=370af416-"));
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptor: type is null ServiceDescriptorRepresentation{id=370af416-"));
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptor: pool is null ServiceDescriptorRepresentation{id=370af416-"));
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptor: location is null ServiceDescriptorRepresentation{id=370af416-"));
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptor: state is null ServiceDescriptorRepresentation{id=370af416-"));
+            assertTrue(e.getMessage().contains("Invalid ServiceDescriptor: properties is null ServiceDescriptorRepresentation{id=370af416-"));
+        }
+    }
+
+    @Test
+    public void testPartialDescriptors()
+            throws Exception
+    {
+        HttpServiceBalancerImpl balancer = mock(HttpServiceBalancerImpl.class);
+        ServiceInventoryConfig serviceInventoryConfig = new ServiceInventoryConfig()
+                .setServiceInventoryUri(Resources.getResource("service-inventory-partial.json").toURI());
+
+        ServiceInventory serviceInventory = new ServiceInventory(serviceInventoryConfig,
+                new DiscoveryClientConfig(),
+                new NodeInfo("test"),
+                JsonCodec.jsonCodec(ServiceDescriptorsRepresentation.class),
+                balancer);
+
+        assertEquals(Iterables.size(serviceInventory.getServiceDescriptors()), 1);
     }
 }

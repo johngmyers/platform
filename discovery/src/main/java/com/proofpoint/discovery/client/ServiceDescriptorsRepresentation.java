@@ -18,36 +18,46 @@ package com.proofpoint.discovery.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class ServiceDescriptorsRepresentation
 {
+    @NotNull
     private final String environment;
-    private final List<ServiceDescriptor> serviceDescriptors;
+    @NotNull
+    @Valid
+    private final List<ServiceDescriptorRepresentation> serviceDescriptorRepresentations;
 
     @JsonCreator
     public ServiceDescriptorsRepresentation(
             @JsonProperty("environment") String environment,
-            @JsonProperty("services") List<ServiceDescriptor> serviceDescriptors)
+            @JsonProperty("services") List<ServiceDescriptorRepresentation> serviceDescriptorRepresentations)
     {
-        Preconditions.checkNotNull(serviceDescriptors);
         this.environment = environment;
-        this.serviceDescriptors = ImmutableList.copyOf(serviceDescriptors);
+        if (serviceDescriptorRepresentations == null) {
+            this.serviceDescriptorRepresentations = null;
+        }
+        else {
+            this.serviceDescriptorRepresentations = ImmutableList.copyOf(serviceDescriptorRepresentations);
+        }
     }
 
-    @JsonProperty
     public String getEnvironment()
     {
         return environment;
     }
 
-    @JsonProperty("services")
     public List<ServiceDescriptor> getServiceDescriptors()
     {
-        return serviceDescriptors;
+        ImmutableList.Builder<ServiceDescriptor> builder = ImmutableList.builder();
+        for (ServiceDescriptorRepresentation representation : serviceDescriptorRepresentations) {
+            builder.add(representation.toServiceDescriptor());
+        }
+        return builder.build();
     }
 
     @Override
@@ -55,7 +65,7 @@ public class ServiceDescriptorsRepresentation
     {
         return Objects.toStringHelper(this)
                 .add("environment", environment)
-                .add("serviceDescriptors", serviceDescriptors)
+                .add("serviceDescriptorRepresentations", serviceDescriptorRepresentations)
                 .toString();
     }
 }
