@@ -23,16 +23,24 @@ import com.google.inject.Inject;
 import com.proofpoint.log.Logger;
 import sun.management.Agent;
 import sun.management.jmxremote.ConnectorBootstrap;
+import sun.management.jmxremote.LocalRMIServerSocketFactory;
 import sun.rmi.server.UnicastRef;
 
 import javax.annotation.Nullable;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXServiceURL;
+import javax.management.remote.rmi.RMIConnectorServer;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.RemoteObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
@@ -63,25 +71,47 @@ public class JmxAgent
                 registryPort = config.getRmiRegistryPort();
             }
 
-            int serverPort = 0;
+            int serverPort = 4101;
             if (config.getRmiServerPort() != null) {
                 serverPort = config.getRmiServerPort();
             }
 
-            // This is somewhat of a hack, but the jmx agent in Oracle/OpenJDK doesn't
-            // have a programmatic API for starting it and controlling its parameters
-            System.setProperty("com.sun.management.jmxremote", "true");
-            System.setProperty("com.sun.management.jmxremote.port", Integer.toString(registryPort));
-            System.setProperty("com.sun.management.jmxremote.rmi.port", Integer.toString(serverPort));
+            RMIServerSocketFactory serverFactory = new LocalRMIServerSocketFactory();
+
+            LocateRegistry.createRegistry(serverPort, null, serverFactory);
+
+            StringBuffer rmiUrl = new StringBuffer();
+            rmiUrl.append("service:jmx:");
+            rmiUrl.append("rmi://127.0.0.1:").append(registryPort).append("/jndi/");
+            rmiUrl.append("rmi://127.0.0.1:").append(serverPort).append("/connector");
+
+            Map<String, Object> env = new HashMap<>();
+            env.put(RMIConnectorServer.RMI_SERVER_SOCKET_FACTORY_ATTRIBUTE, serverFactory);
+
             System.setProperty("com.sun.management.jmxremote.authenticate", "false");
             System.setProperty("com.sun.management.jmxremote.ssl", "false");
 
-            try {
-                Agent.startAgent();
-            }
-            catch (Exception e) {
-                throw Throwables.propagate(e);
-            }
+            RMIConnectorServer rmiServer = new RMIConnectorServer(
+                    new JMXServiceURL(rmiUrl.toString()),
+                    env,
+                    ManagementFactory.getPlatformMBeanServer()
+            );
+            rmiServer.start();
+
+//            // This is somewhat of a hack, but the jmx agent in Oracle/OpenJDK doesn't
+//            // have a programmatic API for starting it and controlling its parameters
+//            System.setProperty("com.sun.management.jmxremote", "true");
+//            System.setProperty("com.sun.management.jmxremote.port", Integer.toString(registryPort));
+//            System.setProperty("com.sun.management.jmxremote.rmi.port", Integer.toString(serverPort));
+//            System.setProperty("com.sun.management.jmxremote.authenticate", "false");
+//            System.setProperty("com.sun.management.jmxremote.ssl", "false");
+//
+//            try {
+//                Agent.startAgent();
+//            }
+//            catch (Exception e) {
+//                throw Throwables.propagate(e);
+//            }
 
             try {
                 // This is how the jdk jmx agent constructs its url

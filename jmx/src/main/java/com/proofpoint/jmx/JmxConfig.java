@@ -21,7 +21,7 @@ import com.proofpoint.configuration.DefunctConfig;
 @DefunctConfig("jmx.rmiserver.hostname")
 public class JmxConfig
 {
-    private boolean enabled;
+    private boolean enabled = true;
     private Integer rmiRegistryPort;
     private Integer rmiServerPort;
 
