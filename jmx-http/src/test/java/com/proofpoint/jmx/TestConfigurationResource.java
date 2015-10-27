@@ -114,37 +114,38 @@ public class TestConfigurationResource
     public void testGetConfiguration()
             throws Exception
     {
-        Map<String, Map<String, String>> response = client.execute(
+        Map<String, Map<String, Object>> response = client.execute(
                 prepareGet().setUri(uriFor("/admin/configuration")).build(),
-                createJsonResponseHandler(jsonCodec(new TypeToken<Map<String, Map<String, String>>>()
+                createJsonResponseHandler(jsonCodec(new TypeToken<Map<String, Map<String, Object>>>()
                 {
                 })));
 
-        assertMapContains(response, "testing.duration", "null", "3.00m", null);
-        assertMapContains(response, "testing.password", "[REDACTED]", "[REDACTED]", "Testing Description");
+        assertMapContains(response, "testing.duration", "null", "3.00m", null, true);
+        assertMapContains(response, "testing.password", "[REDACTED]", "[REDACTED]", "Testing Description", null);
         assertNoExtraneousFields(response);
     }
 
     private static void assertMapContains(
-            Map<String, Map<String, String>> response,
+            Map<String, Map<String, Object>> response,
             String expectedPropertyName,
             String expectedDefaultValue,
             String expectedCurrentValue,
-            @Nullable String expectedDescription)
+            @Nullable String expectedDescription, Boolean expectedDeprecated)
     {
-        Map<String, String> info = response.get(expectedPropertyName);
+        Map<String, Object> info = response.get(expectedPropertyName);
         assertNotNull(info, expectedPropertyName + "is present in response");
 
         assertEquals(info.get("defaultValue"), expectedDefaultValue, "default value of " + expectedPropertyName);
         assertEquals(info.get("currentValue"), expectedCurrentValue, "current value of " + expectedPropertyName);
         assertEquals(info.get("description"), expectedDescription, "description of " + expectedPropertyName);
+        assertEquals(info.get("deprecated"), expectedDeprecated, "deprecated of " + expectedPropertyName);
     }
 
-    private static void assertNoExtraneousFields(Map<String, Map<String, String>> response)
+    private static void assertNoExtraneousFields(Map<String, Map<String, Object>> response)
     {
-        for (Entry<String, Map<String, String>> entry : response.entrySet()) {
+        for (Entry<String, Map<String, Object>> entry : response.entrySet()) {
             HashSet<String> extraKeys = newHashSet(entry.getValue().keySet());
-            extraKeys.removeAll(ImmutableSet.of("defaultValue", "currentValue", "description"));
+            extraKeys.removeAll(ImmutableSet.of("defaultValue", "currentValue", "description", "deprecated"));
             assertEquals(extraKeys, ImmutableSet.of(), "keys in map entry " + entry.getKey());
         }
     }
@@ -159,12 +160,14 @@ public class TestConfigurationResource
         private Duration duration;
         private String password;
 
+        @Deprecated
         Duration getDuration()
         {
             return duration;
         }
 
         @Config("testing.duration")
+        @Deprecated
         void setDuration(Duration duration)
         {
             this.duration = duration;

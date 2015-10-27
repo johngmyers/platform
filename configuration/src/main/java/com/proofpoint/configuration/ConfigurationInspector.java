@@ -15,7 +15,6 @@
  */
 package com.proofpoint.configuration;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.ImmutableSortedSet.Builder;
@@ -32,6 +31,7 @@ import java.util.SortedSet;
 import static com.google.common.base.Objects.firstNonNull;
 import static com.google.common.base.Objects.toStringHelper;
 import static com.proofpoint.configuration.ConfigurationMetadata.isConfigClass;
+import static java.util.Objects.requireNonNull;
 
 public class ConfigurationInspector
 {
@@ -87,7 +87,7 @@ public class ConfigurationInspector
 
         private ConfigRecord(ConfigurationProvider<T> configurationProvider)
         {
-            Preconditions.checkNotNull(configurationProvider, "configurationProvider");
+            requireNonNull(configurationProvider, "configurationProvider");
 
             key = configurationProvider.getKey();
             configClass = configurationProvider.getConfigClass();
@@ -141,7 +141,7 @@ public class ConfigurationInspector
                     String defaultValue = getValue(getter, defaults, "-- none --");
                     String currentValue = getValue(getter, instance, "-- n/a --");
 
-                    builder.add(new ConfigAttribute(attributePrefix + attribute.getName(), propertyName, defaultValue, currentValue, description, attribute.isSecuritySensitive()));
+                    builder.add(new ConfigAttribute(attributePrefix + attribute.getName(), propertyName, defaultValue, currentValue, description, attribute.isSecuritySensitive(), attribute.isDeprecated()));
                 }
             }
         }
@@ -153,16 +153,16 @@ public class ConfigurationInspector
                 map = (Map<K, V>) getter.invoke(instance);
             }
             catch (Throwable e) {
-                builder.add(new ConfigAttribute(attributeName, propertyName, "-- n/a --", "-- ERROR --", description, false));
+                builder.add(new ConfigAttribute(attributeName, propertyName, "-- n/a --", "-- ERROR --", description, false, deprecated));
                 return;
             }
 
             if (map == null) {
-                builder.add(new ConfigAttribute(attributeName, propertyName, "-- n/a --", "null", description, false));
+                builder.add(new ConfigAttribute(attributeName, propertyName, "-- n/a --", "null", description, false, deprecated));
                 return;
             }
             if (map.isEmpty()) {
-                builder.add(new ConfigAttribute(attributeName, propertyName, "-- n/a --", "-- empty --", description, false));
+                builder.add(new ConfigAttribute(attributeName, propertyName, "-- n/a --", "-- empty --", description, false, deprecated));
                 return;
             }
             for (Entry<K, V> entry : map.entrySet()) {
@@ -177,7 +177,7 @@ public class ConfigurationInspector
                 else {
                     builder.add(new ConfigAttribute(attributeName + "[" + entry.getKey().toString() + "]",
                             propertyName + "." + entry.getKey().toString(),
-                            "-- n/a --", entry.getValue().toString(), description, false));
+                            "-- n/a --", entry.getValue().toString(), description, false, deprecated));
                 }
             }
         }
@@ -249,16 +249,15 @@ public class ConfigurationInspector
         private final String defaultValue;
         private final String currentValue;
         private final String description;
+        private final boolean deprecated;
 
-        // todo this class needs to be updated to include the concept of deprecated property names
-
-        private ConfigAttribute(String attributeName, String propertyName, String defaultValue, String currentValue, String description, boolean securitySensitive)
+        private ConfigAttribute(String attributeName, String propertyName, String defaultValue, String currentValue, String description, boolean securitySensitive, boolean deprecated)
         {
-            Preconditions.checkNotNull(attributeName, "attributeName");
-            Preconditions.checkNotNull(propertyName, "propertyName");
-            Preconditions.checkNotNull(defaultValue, "defaultValue");
-            Preconditions.checkNotNull(currentValue, "currentValue");
-            Preconditions.checkNotNull(description, "description");
+            requireNonNull(attributeName, "attributeName");
+            requireNonNull(propertyName, "propertyName");
+            requireNonNull(defaultValue, "defaultValue");
+            requireNonNull(currentValue, "currentValue");
+            requireNonNull(description, "description");
 
             this.attributeName = attributeName;
             this.propertyName = propertyName;
@@ -275,6 +274,7 @@ public class ConfigurationInspector
                 this.currentValue = currentValue;
             }
             this.description = description;
+            this.deprecated = this.deprecated;
         }
 
         public String getAttributeName()
@@ -300,6 +300,11 @@ public class ConfigurationInspector
         public String getDescription()
         {
             return description;
+        }
+
+        public boolean isDeprecated()
+        {
+            return deprecated;
         }
 
         @Override
@@ -338,6 +343,7 @@ public class ConfigurationInspector
                     .add("defaultValue", defaultValue)
                     .add("currentValue", currentValue)
                     .add("description", description)
+                    .add("deprecated", deprecated)
                     .toString();
         }
     }

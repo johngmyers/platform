@@ -85,5 +85,14 @@ public class ConfigurationResource
             }
             return description;
         }
+
+        @JsonProperty
+        Boolean isDeprecated()
+        {
+            if (getConfigAttribute().isDeprecated()) {
+                return true;
+            }
+            return null;
+        }
     }
 }
