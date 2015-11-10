@@ -15,7 +15,7 @@
  */
 package com.proofpoint.bootstrap;
 
-import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import com.google.inject.Binder;
@@ -27,6 +27,9 @@ import com.google.inject.ProvisionException;
 import com.proofpoint.configuration.AbstractConfigurationAwareModule;
 import com.proofpoint.configuration.Config;
 import com.proofpoint.configuration.ConfigurationDefaultingModule;
+import com.proofpoint.configuration.LegacyConfig;
+import com.proofpoint.log.Level;
+import com.proofpoint.log.Logging;
 import com.proofpoint.node.NodeInfo;
 import com.proofpoint.node.NodeModule;
 import org.testng.annotations.BeforeMethod;
@@ -34,11 +37,15 @@ import org.testng.annotations.Test;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.proofpoint.bootstrap.Bootstrap.bootstrapApplication;
 import static com.proofpoint.configuration.ConfigurationModule.bindConfig;
+import static com.proofpoint.log.Logging.addLogTester;
+import static com.proofpoint.log.Logging.resetLogTesters;
 import static com.proofpoint.testing.Assertions.assertContains;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
@@ -437,6 +444,32 @@ public class TestBootstrap
     }
 
     @Test
+    public void testWarningsLogged()
+            throws Exception
+    {
+        List<String> messages = new ArrayList<>();
+        Logging.initialize();
+
+        try {
+            addLogTester("Bootstrap", ((level, message, thrown) -> {
+                if (level == Level.WARN && message.startsWith("Warning: ")) {
+                    messages.add(message);
+                }
+            }));
+
+            bootstrapApplication("test-application")
+                    .doNotInitializeLogging()
+                    .withModules(binder -> bindConfig(binder).to(SimpleConfig.class))
+                    .setRequiredConfigurationProperty("legacy-property", "required value")
+                    .initialize();
+        }
+        finally {
+            resetLogTesters();
+        }
+        assertEquals(messages, ImmutableList.of("Warning: Configuration property 'legacy-property' has been replaced. Use 'property' instead."));
+    }
+
+    @Test
     public void testPostConstructCalled()
             throws Exception
     {
@@ -526,6 +559,7 @@ public class TestBootstrap
         }
 
         @Config("property")
+        @LegacyConfig("legacy-property")
         public SimpleConfig setProperty(String property)
         {
             this.property = property;
