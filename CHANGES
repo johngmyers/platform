@@ -1,12 +1,27 @@
 Platform 1.32
 
+* Bootstrap
+
+  We added support to LifeCycleManager for a new @StopTraffic annotation. Upon
+  server shutdown, methods annotated with @StopTraffic are called first, then
+  shutdown waits for the duration in the "lifecycle.stop-traffic.delay"
+  configuration option (default "0s"), then shutdown continues with calling
+  methods annotated with @PreDestroy.
+
+  We changed the Discovery service de-announcement to @StopTraffic.
+
 * Reporting
 
   Report collections now handle java.util.Optional values.
 
+* Maven
+
+  We have configured maven-duplicate-finder-plugin to ignore duplicate
+  javac.sh resources from Jetty packages.
+
 * Library Upgrades
 
-  - Jetty to 9.3.7
+  - Jetty to 9.3.7 (from 9.3.6)
 
 Platform 1.31
 
