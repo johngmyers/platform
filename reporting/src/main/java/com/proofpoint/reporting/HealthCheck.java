@@ -22,7 +22,10 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation may be placed on either a method with no arguments or a
- * field of type {@link java.util.concurrent.atomic.AtomicReference}.
+ * field of type {@link java.util.concurrent.atomic.AtomicReference}. When
+ * the object is bound with {@link HealthBinder}, the method will be called
+ * or the field will be examined every minute and the resulting health status
+ * will be sent to monitoring.
  *
  * A value of {@code null} indicates healthy; any other value indicates a
  * critical problem, with the value's {@link #toString()} used as the message.

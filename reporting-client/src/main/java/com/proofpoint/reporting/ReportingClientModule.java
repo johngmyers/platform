@@ -18,6 +18,7 @@ package com.proofpoint.reporting;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Provides;
+import com.google.inject.Scopes;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -31,6 +32,7 @@ import static com.proofpoint.concurrent.Threads.daemonThreadsNamed;
 import static com.proofpoint.configuration.ConfigurationModule.bindConfig;
 import static com.proofpoint.discovery.client.DiscoveryBinder.discoveryBinder;
 import static com.proofpoint.reporting.HealthBinder.healthBinder;
+import static java.util.concurrent.Executors.newFixedThreadPool;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 public class ReportingClientModule
@@ -43,6 +45,8 @@ public class ReportingClientModule
         binder.bind(ReportCollector.class).in(SINGLETON);
         binder.bind(ReportSink.class).to(ReportQueue.class).in(SINGLETON);
         binder.bind(ReportClient.class).in(SINGLETON);
+        binder.bind(HealthCollector.class).in(Scopes.SINGLETON);
+        binder.bind(HealthReporter.class).in(Scopes.SINGLETON);
 
         discoveryBinder(binder).bindDiscoveredHttpClient("reporting", ForReportClient.class);
         bindConfig(binder).to(ReportClientConfig.class);
@@ -65,5 +69,19 @@ public class ReportingClientModule
         return new ThreadPoolExecutor(1, 1, 0, TimeUnit.NANOSECONDS, new LinkedBlockingQueue<>(5),
                         daemonThreadsNamed("reporting-client-%s"),
                         new DiscardOldestPolicy());
+    }
+
+    @Provides
+    @ForHealthCollector
+    private static ScheduledExecutorService createHealthCollectorScheduledExecutorService()
+    {
+        return newSingleThreadScheduledExecutor(daemonThreadsNamed("health-collector-%s"));
+    }
+
+    @Provides
+    @ForHealthReporter
+    private static ExecutorService createHealthReporterExecutorService()
+    {
+        return newFixedThreadPool(3, daemonThreadsNamed("health-reporter-%s"));
     }
 }
