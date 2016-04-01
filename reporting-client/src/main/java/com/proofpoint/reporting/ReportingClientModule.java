@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 import static com.proofpoint.concurrent.Threads.daemonThreadsNamed;
 import static com.proofpoint.configuration.ConfigurationModule.bindConfig;
 import static com.proofpoint.discovery.client.DiscoveryBinder.discoveryBinder;
+import static com.proofpoint.jaxrs.JaxrsBinder.jaxrsBinder;
 import static com.proofpoint.reporting.HealthBinder.healthBinder;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
@@ -47,6 +48,8 @@ public class ReportingClientModule
 
         binder.bind(ShutdownMonitor.class).in(Scopes.SINGLETON);
         healthBinder(binder).export(ShutdownMonitor.class);
+
+        jaxrsBinder(binder).bindAdmin(HealthResource.class);
     }
 
     @Provides
