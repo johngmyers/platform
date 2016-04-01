@@ -43,7 +43,7 @@ public class TestLogging
         tempDir = createTempDir();
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown()
             throws IOException
     {
