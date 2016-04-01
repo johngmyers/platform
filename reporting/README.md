@@ -3,7 +3,8 @@ reporting metrics into a [KairosDB](https://code.google.com/p/kairosdb)
 time-series database.
 
 It also provides an annotation-based API for reporting health status
-so that load balancers can remove the instance from rotation.
+into a Naigios-based monitoring service and so that load balancers can
+remove the instance from rotation.
 
 Collecting data
 ===============
@@ -240,24 +241,29 @@ class TestStoreStatsRecorder {
 Health checks
 =============
 
-The `@HealthCheckRemoveFromRotation` annotation may be placed on either a
-method with no arguments or a field of type `AtomicReference`. When the object
-is bound with `HealthBinder`, the method will be called or the field will be
-examined by the `/inrotation.txt` resource. A value of `null` indicates
+The `@HealthCheck` or `@HealthCheckRemoveFromRotation` annotation may be
+placed on either a method with no arguments or a field of type
+`AtomicReference`. When the object is bound with `HealthBinder`, the method
+will be called or the field will be examined every minute and the resulting
+health status will be sent to the monitoring-acceptor service. If the
+`@HealthCheckRemoveFromRotation` annotation is used, it will additionally
+be used by the `/inrotation.txt` resource. A value of `null` indicates
 healthy; any other value indicates a critical problem, with the `toString()`
 used as the message.
 
 The `value` field of the `@HealthCheckRemoveFromRotation` annotation is the
 base name of the check. This is prepended with the application name. If the
 object was bound with a name or annotation, that is appended in parentheses
-to the name of the check. This and the `@HealthCheck` annotation are for a
-future integration with monitoring.
+to the name of the check. 
+
+The /admin/health resource on the server's admin port returns a list of the
+server's health checks.
 
 Reporting client
 ================
 
 `ReportingClientModule` enables reporting of collected data to the time-series
-database and the `/inrotation.txt` resource.
+database, the monitoring-acceptor service, and the `/inrotation.txt` resource.
 
 Added tags
 ----------
