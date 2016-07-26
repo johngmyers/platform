@@ -65,7 +65,7 @@ class ReportCollector
     @PostConstruct
     public void start()
     {
-        collectionExecutorService.scheduleAtFixedRate((Runnable) this::collectData, 1, 1, TimeUnit.MINUTES);
+        collectionExecutorService.scheduleAtFixedRate((Runnable) this::collectData, 1, 500, TimeUnit.MILLISECONDS);
 
         clientExecutorService.submit((Runnable) () -> reportClient.report(currentTimeMillis(), ImmutableTable.of("ReportCollector.ServerStart", ImmutableMap.of(), (Object) 1)));
     }

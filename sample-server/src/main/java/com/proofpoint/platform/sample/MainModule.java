@@ -20,6 +20,7 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
+import com.google.inject.Singleton;
 
 import static com.proofpoint.configuration.ConfigurationModule.bindConfig;
 import static com.proofpoint.discovery.client.DiscoveryBinder.discoveryBinder;
@@ -45,6 +46,8 @@ public class MainModule
         bindConfig(binder).to(StoreConfig.class);
 
         discoveryBinder(binder).bindHttpAnnouncement("person");
+        binder.bind(DosClient.class).asEagerSingleton();
+        discoveryBinder(binder).bindDiscoveredHttpClient("reporting");
     }
 
     @Provides
@@ -52,4 +55,5 @@ public class MainModule
     {
         return Ticker.systemTicker();
     }
+
 }
