@@ -100,7 +100,7 @@ public class PauseMeter
 
                 long pauseNanos = delta - shortestObservableInterval;
                 synchronized (histogram) {
-                    histogram.recordValueWithExpectedInterval(pauseNanos, sleepNanos);
+                    histogram.recordValue(pauseNanos);
                     totalPauseNanos += pauseNanos;
                 }
             }
