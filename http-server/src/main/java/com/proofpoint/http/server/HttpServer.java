@@ -241,6 +241,7 @@ public class HttpServer
             sslContextFactory.setExcludeCipherSuites();
             sslContextFactory.setIncludeCipherSuites(ENABLED_CIPHERS);
             sslContextFactory.setCipherComparator(Ordering.explicit("", ENABLED_CIPHERS));
+            sslContextFactory.setSecureRandomAlgorithm(config.getSecureRandomAlgorithm());
             SslConnectionFactory sslConnectionFactory = new SslConnectionFactory(sslContextFactory, "http/1.1");
 
             Integer acceptors = config.getHttpsAcceptorThreads();
@@ -282,6 +283,7 @@ public class HttpServer
                 sslContextFactory.setExcludeCipherSuites();
                 sslContextFactory.setIncludeCipherSuites(ENABLED_CIPHERS);
                 sslContextFactory.setCipherComparator(Ordering.explicit("", ENABLED_CIPHERS));
+                sslContextFactory.setSecureRandomAlgorithm(config.getSecureRandomAlgorithm());
                 SslConnectionFactory sslConnectionFactory = new SslConnectionFactory(sslContextFactory, "http/1.1");
                 adminConnector = new ServerConnector(server, adminThreadPool, null, null, 0, -1, sslConnectionFactory, new HttpConnectionFactory(adminConfiguration));
             } else {

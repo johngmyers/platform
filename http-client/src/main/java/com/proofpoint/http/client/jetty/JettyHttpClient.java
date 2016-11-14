@@ -197,6 +197,7 @@ public class JettyHttpClient
             sslContextFactory.setTrustStorePath(config.getTrustStorePath());
             sslContextFactory.setTrustStorePassword(config.getTrustStorePassword());
         }
+        sslContextFactory.setSecureRandomAlgorithm(config.getSecureRandomAlgorithm());
 
         if (config.getMaxRequestsQueuedPerDestination() == 0) {
             httpClient = new HttpClient(

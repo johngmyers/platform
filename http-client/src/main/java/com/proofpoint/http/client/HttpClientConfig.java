@@ -47,6 +47,7 @@ public class HttpClientConfig
     private String keyStorePassword = System.getProperty(JAVAX_NET_SSL_KEY_STORE_PASSWORD);
     private String trustStorePath;
     private String trustStorePassword;
+    private String secureRandomAlgorithm;
 
     @NotNull
     @MinDuration("0ms")
@@ -186,6 +187,18 @@ public class HttpClientConfig
     public HttpClientConfig setTrustStorePassword(String trustStorePassword)
     {
         this.trustStorePassword = trustStorePassword;
+        return this;
+    }
+
+    public String getSecureRandomAlgorithm()
+    {
+        return secureRandomAlgorithm;
+    }
+
+    @Config("http-client.secure-random-algorithm")
+    public HttpClientConfig setSecureRandomAlgorithm(String secureRandomAlgorithm)
+    {
+        this.secureRandomAlgorithm = secureRandomAlgorithm;
         return this;
     }
 }

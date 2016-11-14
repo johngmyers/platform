@@ -62,6 +62,7 @@ public class HttpServerConfig
     private int httpsPort = 8443;
     private String keystorePath = "etc/keystore.jks";
     private String keystorePassword = "keystore";
+    private String secureRandomAlgorithm;
 
     private String logPath = "var/log/http-request.log";
     private boolean logEnabled = true;
@@ -174,6 +175,18 @@ public class HttpServerConfig
     public HttpServerConfig setKeystorePassword(String keystorePassword)
     {
         this.keystorePassword = keystorePassword;
+        return this;
+    }
+
+    public String getSecureRandomAlgorithm()
+    {
+        return secureRandomAlgorithm;
+    }
+
+    @Config("http-server.https.secure-random-algorithm")
+    public HttpServerConfig setSecureRandomAlgorithm(String secureRandomAlgorithm)
+    {
+        this.secureRandomAlgorithm = secureRandomAlgorithm;
         return this;
     }
 
