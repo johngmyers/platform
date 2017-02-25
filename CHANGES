@@ -1,5 +1,9 @@
 Platform 1.84
 
+* MoreFutures
+
+  - We deprecated most MoreFutures methods that return a CompletableFuture.
+
 * The "/admin/stop-announcing" resource on the admin port now accepts the
   "server.admin" role in the SecurityContext for authorization.
 

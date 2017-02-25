@@ -93,6 +93,7 @@ public final class MoreFutures
     /**
      * Returns a future that can not be completed or canceled.
      */
+    @Deprecated
     public static <V> CompletableFuture<V> unmodifiableFuture(CompletableFuture<V> future)
     {
         return unmodifiableFuture(future, false);
@@ -101,6 +102,7 @@ public final class MoreFutures
     /**
      * Returns a future that can not be completed or optionally canceled.
      */
+    @Deprecated
     public static <V> CompletableFuture<V> unmodifiableFuture(CompletableFuture<V> future, boolean propagateCancel)
     {
         requireNonNull(future, "future is null");
@@ -128,6 +130,7 @@ public final class MoreFutures
     /**
      * Returns a failed future containing the specified throwable.
      */
+    @Deprecated
     public static <V> CompletableFuture<V> failedFuture(Throwable throwable)
     {
         requireNonNull(throwable, "throwable is null");
@@ -258,6 +261,7 @@ public final class MoreFutures
      * or exceptionally. Cancellation of the future does not propagate to the supplied
      * futures.
      */
+    @Deprecated
     public static <V> CompletableFuture<V> firstCompletedFuture(Iterable<? extends CompletionStage<? extends V>> futures)
     {
         return firstCompletedFuture(futures, false);
@@ -268,6 +272,7 @@ public final class MoreFutures
      * or exceptionally. Cancellation of the future will optionally propagate to the
      * supplied futures.
      */
+    @Deprecated
     public static <V> CompletableFuture<V> firstCompletedFuture(Iterable<? extends CompletionStage<? extends V>> futures, boolean propagateCancel)
     {
         requireNonNull(futures, "futures is null");
@@ -307,6 +312,7 @@ public final class MoreFutures
      * returned future as a list of results matching the input order. If no futures are
      * provided, returns a future completed with an empty list.
      */
+    @Deprecated
     public static <V> CompletableFuture<List<V>> allAsList(List<CompletableFuture<? extends V>> futures)
     {
         CompletableFuture<Void> allDoneFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
@@ -348,6 +354,7 @@ public final class MoreFutures
      * when the timeout expires.  If the timeout occurs or the returned CompletableFuture
      * is canceled, the supplied future will be canceled.
      */
+    @Deprecated
     public static <T> CompletableFuture<T> addTimeout(CompletableFuture<T> future, Callable<T> onTimeout, Duration timeout, ScheduledExecutorService executorService)
     {
         requireNonNull(future, "future is null");
