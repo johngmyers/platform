@@ -31,6 +31,7 @@ import com.proofpoint.configuration.Problems.Monitor;
 import org.apache.bval.jsr.ApacheValidationProvider;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.GuardedBy;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -56,6 +57,7 @@ import static java.util.Objects.requireNonNull;
 
 public final class ConfigurationFactory
 {
+    @GuardedBy("VALIDATOR")
     private static final Validator VALIDATOR = Validation.byProvider(ApacheValidationProvider.class).configure().buildValidatorFactory().getValidator();
 
     private final Map<String, String> properties;
@@ -208,7 +210,7 @@ public final class ConfigurationFactory
             }
         }
 
-        for (ConstraintViolation<?> violation : VALIDATOR.validate(instance)) {
+        for (ConstraintViolation<?> violation : validate(instance)) {
             AttributeMetadata attributeMetadata = configurationMetadata.getAttributes()
                     .get(LOWER_CAMEL.to(UPPER_CAMEL, violation.getPropertyPath().toString()));
             if (attributeMetadata == null || attributeMetadata.getInjectionPoint() == null) {
@@ -227,6 +229,13 @@ public final class ConfigurationFactory
         }
 
         return instance;
+    }
+
+    private static <T> Set<ConstraintViolation<T>> validate(T instance)
+    {
+        synchronized (VALIDATOR) {
+            return VALIDATOR.validate(instance);
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -18,6 +18,7 @@ package com.proofpoint.jaxrs;
 import com.google.common.reflect.TypeToken;
 import org.apache.bval.jsr.ApacheValidationProvider;
 
+import javax.annotation.concurrent.GuardedBy;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validation;
@@ -30,6 +31,7 @@ import java.util.Set;
 
 public class ValidationUtils
 {
+    @GuardedBy("VALIDATOR")
     private static final Validator VALIDATOR = Validation.byProvider(ApacheValidationProvider.class).configure().buildValidatorFactory().getValidator();
 
     private ValidationUtils() {}
@@ -37,17 +39,20 @@ public class ValidationUtils
     public static void validateObject(Type genericType, Object object)
             throws BeanValidationException
     {
-        Set<ConstraintViolation<Object>> violations = VALIDATOR.validate(object);
+        Set<ConstraintViolation<Object>> violations;
+        synchronized (VALIDATOR) {
+            violations = VALIDATOR.validate(object);
 
-        if (violations.isEmpty() && List.class.isAssignableFrom(TypeToken.of(genericType).getRawType())) {
-            violations = VALIDATOR.<Object>validate(new ValidatableList((List<?>) object));
-        }
-        else if (violations.isEmpty() && Collection.class.isAssignableFrom(TypeToken.of(genericType).getRawType())) {
-            violations = VALIDATOR.<Object>validate(new ValidatableCollection((Collection<?>) object));
-        }
+            if (violations.isEmpty() && List.class.isAssignableFrom(TypeToken.of(genericType).getRawType())) {
+                violations = VALIDATOR.validate(new ValidatableList((List<?>) object));
+            }
+            else if (violations.isEmpty() && Collection.class.isAssignableFrom(TypeToken.of(genericType).getRawType())) {
+                violations = VALIDATOR.validate(new ValidatableCollection((Collection<?>) object));
+            }
 
-        if (violations.isEmpty() && Map.class.isAssignableFrom(TypeToken.of(genericType).getRawType())) {
-            violations = VALIDATOR.<Object>validate(new ValidatableMap((Map<?, ?>) object));
+            if (violations.isEmpty() && Map.class.isAssignableFrom(TypeToken.of(genericType).getRawType())) {
+                violations = VALIDATOR.validate(new ValidatableMap((Map<?, ?>) object));
+            }
         }
 
         if (!violations.isEmpty()) {

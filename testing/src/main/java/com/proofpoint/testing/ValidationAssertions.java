@@ -18,6 +18,7 @@ package com.proofpoint.testing;
 import com.google.common.annotations.Beta;
 import org.apache.bval.jsr.ApacheValidationProvider;
 
+import javax.annotation.concurrent.GuardedBy;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -30,10 +31,18 @@ import static org.testng.Assert.fail;
 @Beta
 public class ValidationAssertions
 {
+    @GuardedBy("VALIDATOR")
     private static final Validator VALIDATOR = Validation.byProvider(ApacheValidationProvider.class).configure().buildValidatorFactory().getValidator();
 
     private ValidationAssertions()
     {
+    }
+
+    private static <T> Set<ConstraintViolation<T>> validate(T object)
+    {
+        synchronized (VALIDATOR) {
+            return VALIDATOR.validate(object);
+        }
     }
 
     public static <T> T assertValidates(T object)
@@ -43,7 +52,7 @@ public class ValidationAssertions
 
     public static <T> T assertValidates(T object, String message)
     {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(object);
+        Set<ConstraintViolation<T>> violations = validate(object);
         if (violations.isEmpty()) {
             return object;
         }
@@ -69,7 +78,7 @@ public class ValidationAssertions
 
     public static <T> void assertFailsValidation(T object, String field, String expectedErrorMessage, Class<? extends Annotation> annotation, String message)
     {
-        Set<ConstraintViolation<T>> violations = VALIDATOR.validate(object);
+        Set<ConstraintViolation<T>> violations = validate(object);
 
         for (ConstraintViolation<T> violation : violations) {
             if (annotation.isInstance(violation.getConstraintDescriptor().getAnnotation()) &&

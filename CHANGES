@@ -17,6 +17,9 @@ Platform 1.84
 
   We added an in-memory buffer to reduce locking contention around logging.
 
+* [Bug] Synchronize access to Bean Validation in configuration, JAX-RS, and
+  ValidationAssertions.
+
 * Library Upgrades
 
   - Base docker image to 8u171-jdk (was 8u162-jdk)
