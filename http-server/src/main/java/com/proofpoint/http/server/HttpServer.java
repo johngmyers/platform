@@ -27,6 +27,7 @@ import com.proofpoint.stats.MaxGauge;
 import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
 import org.eclipse.jetty.http2.server.HTTP2ServerConnectionFactory;
+import org.eclipse.jetty.io.ConnectionStatistics;
 import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -106,6 +107,8 @@ public class HttpServer
     private final RequestStats stats;
     private final MaxGauge busyThreads = new MaxGauge();
     private final RequestLog requestLog;
+    private final ConnectionStats httpConnectionStats;
+    private final ConnectionStats httpsConnectionStats;
     private final ClientAddressExtractor clientAddressExtractor;
 
     private final Optional<ZonedDateTime> certificateExpiration;
@@ -278,7 +281,15 @@ public class HttpServer
                 httpConnector.addBean(channelListener);
             }
 
+            // track connection statistics
+            ConnectionStatistics connectionStats = new ConnectionStatistics();
+            httpConnector.addBean(connectionStats);
+            this.httpConnectionStats = new ConnectionStats(connectionStats);
+
             server.addConnector(httpConnector);
+        }
+        else {
+            httpConnectionStats = null;
         }
 
         // set up NIO-based HTTPS connector
@@ -305,7 +316,15 @@ public class HttpServer
                 httpsConnector.addBean(channelListener);
             }
 
+            // track connection statistics
+            ConnectionStatistics connectionStats = new ConnectionStatistics();
+            httpsConnector.addBean(connectionStats);
+            this.httpsConnectionStats = new ConnectionStats(connectionStats);
+
             server.addConnector(httpsConnector);
+        }
+        else {
+            httpsConnectionStats = null;
         }
 
         // set up NIO-based Admin connector
@@ -523,6 +542,20 @@ public class HttpServer
     {
         return certificateExpiration.map(date -> ZonedDateTime.now().until(date, DAYS))
                 .orElse(null);
+    }
+
+    @Managed
+    @Nested
+    public ConnectionStats getHttpConnectionStats()
+    {
+        return httpConnectionStats;
+    }
+
+    @Managed
+    @Nested
+    public ConnectionStats getHttpsConnectionStats()
+    {
+        return httpsConnectionStats;
     }
 
     @AcceptRequests
