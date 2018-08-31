@@ -20,4 +20,4 @@ cache:
 install: true
 
 script:
-  - mvn -P ci -B install
+  - mvn -P ci,errorprone-compiler -B install
