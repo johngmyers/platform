@@ -35,6 +35,7 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+@SuppressWarnings("FutureReturnValueIgnored")
 public class TestSerialScheduledExecutorService
 {
     private static final String INNER = "inner";

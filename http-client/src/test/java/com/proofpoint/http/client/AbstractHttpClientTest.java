@@ -1327,6 +1327,7 @@ public abstract class AbstractHttpClientTest
     }
 
     @Test
+    @SuppressWarnings("FutureReturnValueIgnored")
     public void testAllConnectionsUsed()
             throws Exception
     {

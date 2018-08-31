@@ -570,10 +570,10 @@ public class QuantileDigest
             // TODO: pack 4 nodes per byte (2 bits each)
             byte flags = 0;
             if (lefts[node] != -1) {
-                flags |= Flags.HAS_LEFT;
+                flags = (byte) (flags | Flags.HAS_LEFT);
             }
             if (rights[node] != -1) {
-                flags |= Flags.HAS_RIGHT;
+                flags = (byte) (flags | Flags.HAS_RIGHT);
             }
             output.writeByte(flags);
         }

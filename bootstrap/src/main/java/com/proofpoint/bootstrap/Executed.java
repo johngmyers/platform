@@ -28,6 +28,7 @@ public abstract class Executed implements Runnable
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @PostConstruct
+    @SuppressWarnings("FutureReturnValueIgnored")
     public void startExecution()
     {
         executor.submit(this);

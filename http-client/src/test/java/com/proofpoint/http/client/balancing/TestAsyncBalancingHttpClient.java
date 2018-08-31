@@ -74,8 +74,8 @@ public class TestAsyncBalancingHttpClient
     }
 
     @Override
+    @SuppressWarnings("FutureReturnValueIgnored")
     protected void issueRequest()
-            throws Exception
     {
         balancingHttpClient.executeAsync(request, mock(ResponseHandler.class));
     }
