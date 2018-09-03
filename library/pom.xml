@@ -672,6 +672,12 @@
 
             <dependency>
                 <groupId>com.proofpoint.platform</groupId>
+                <artifactId>log-manager</artifactId>
+                <version>1.86-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.proofpoint.platform</groupId>
                 <artifactId>node</artifactId>
                 <version>1.86-SNAPSHOT</version>
             </dependency>

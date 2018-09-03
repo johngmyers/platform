@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>com.proofpoint.platform</groupId>
-            <artifactId>log</artifactId>
+            <artifactId>log-manager</artifactId>
         </dependency>
 
         <dependency>
@@ -30,6 +30,11 @@
         <dependency>
             <groupId>com.proofpoint.platform</groupId>
             <artifactId>trace-token</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.proofpoint.platform</groupId>
+            <artifactId>units</artifactId>
         </dependency>
 
         <dependency>
