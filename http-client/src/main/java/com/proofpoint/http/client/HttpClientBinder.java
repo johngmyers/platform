@@ -32,7 +32,6 @@ import org.weakref.jmx.ObjectNameBuilder;
 import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.util.Collection;
-import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -139,7 +138,7 @@ public class HttpClientBinder
         binder.install(module);
         HttpClientBindOptions options = new HttpClientBindOptions();
         binder.bind(HttpClientBindOptions.class).annotatedWith(annotation).toInstance(options);
-        return new HttpClientBindingBuilder(module, newSetBinder(binder, HttpRequestFilter.class, annotation), options);
+        return new HttpClientBindingBuilder(binder, annotation, module, newSetBinder(binder, HttpRequestFilter.class, annotation), options);
     }
 
     /**
@@ -272,12 +271,16 @@ public class HttpClientBinder
 
     public static class HttpClientBindingBuilder
     {
+        private final Binder binder;
+        private final Class<? extends Annotation> annotation;
         private final HttpClientModule module;
         private final Multibinder<HttpRequestFilter> multibinder;
         private final HttpClientBindOptions options;
 
-        private HttpClientBindingBuilder(HttpClientModule module, Multibinder<HttpRequestFilter> multibinder, HttpClientBindOptions options)
+        private HttpClientBindingBuilder(Binder binder, Class<? extends Annotation> annotation, HttpClientModule module, Multibinder<HttpRequestFilter> multibinder, HttpClientBindOptions options)
         {
+            this.binder = binder;
+            this.annotation = annotation;
             this.module = module;
             this.multibinder = multibinder;
             this.options = options;
@@ -343,6 +346,11 @@ public class HttpClientBinder
         {
             module.withPrivateIoThreadPool();
             return this;
+        }
+
+        public HttpClientConfig withHttpClientConfigDefaultsOf()
+        {
+            return bindConfig(binder).bindDefaults(HttpClientConfig.class).annotatedWith(annotation).of();
         }
     }
 }

@@ -24,6 +24,7 @@ import com.proofpoint.bootstrap.LifeCycleManager;
 import com.proofpoint.http.client.HttpClientModule.JettyIoPoolManager;
 import com.proofpoint.http.client.jetty.JettyHttpClient;
 import com.proofpoint.reporting.ReportingModule;
+import com.proofpoint.units.DataSize;
 import org.testng.annotations.Test;
 import org.weakref.jmx.Managed;
 import org.weakref.jmx.testing.TestingMBeanModule;
@@ -279,6 +280,31 @@ public class TestHttpClientBinder
     }
 
     @Test
+    public void testConfigDefaults()
+            throws Exception
+    {
+        Injector injector = bootstrapTest()
+                .withModules(
+                        binder -> {
+                            binder.requireExplicitBindings();
+                            binder.disableCircularProxies();
+                            httpClientBinder(binder).bindHttpClient("foo", FooClient.class)
+                                    .withHttpClientConfigDefaultsOf()
+                                    .setMaxContentLength(DataSize.succinctBytes(1))
+                                    .setMaxConnectionsPerServer(1);
+                        },
+                        new ReportingModule()
+                )
+                .initialize();
+
+        HttpClient fooClient = injector.getInstance(Key.get(HttpClient.class, FooClient.class));
+        assertNotNull(fooClient);
+        // todo assert it had an effect
+
+        assertPoolsDestroyProperly(injector);
+    }
+
+    @Test
     public void testPrivateBindClient()
             throws Exception
     {
@@ -296,6 +322,34 @@ public class TestHttpClientBinder
                 .initialize();
 
         assertNotNull(injector.getInstance(ExposeHttpClient.class).httpClient);
+
+        //todo assert it had an effect
+
+        assertPoolsDestroyProperly(injector);
+    }
+
+    @Test
+    public void testPrivateBindClientWithConfigDefaults()
+            throws Exception
+    {
+        Injector injector = bootstrapTest()
+                .withModules(
+                        binder -> {
+                            newExporter(binder).export(ManagedClass.class);
+                            PrivateBinder privateBinder = binder.newPrivateBinder();
+                            HttpClientBinder.httpClientPrivateBinder(privateBinder, binder)
+                                    .bindHttpClient("foo", FooClient.class)
+                                    .withHttpClientConfigDefaultsOf()
+                                    .setMaxContentLength(DataSize.succinctBytes(1));
+                            privateBinder.bind(ExposeHttpClient.class);
+                            privateBinder.expose(ExposeHttpClient.class);
+                        },
+                        new ReportingModule()
+                )
+                .initialize();
+
+        HttpClient httpClient = injector.getInstance(ExposeHttpClient.class).httpClient;
+        assertNotNull(httpClient);
 
         assertPoolsDestroyProperly(injector);
     }
