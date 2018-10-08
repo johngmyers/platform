@@ -179,9 +179,9 @@ public final class ConfigurationFactory
         return instance;
     }
 
-    <T> T buildDefaults(Class<T> configClass, @Nullable Key<T> configKey, @Nullable String prefix)
+    <T> T buildDefaults(Class<T> configClass, @Nullable String prefix, @Nullable Key<T> key)
     {
-        return build(configClass, prefix, configKey, true, new Problems());
+        return build(configClass, prefix, key, true, new Problems());
     }
 
     private <T> T build(Class<T> configClass, String prefix, @Nullable Key<T> configKey, boolean isDefault, Problems problems)

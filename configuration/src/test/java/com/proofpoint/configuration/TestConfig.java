@@ -286,6 +286,45 @@ public class TestConfig
         assertThat(injector.getInstance(Key.get(ExposeConfig.class, named("prefix"))).config1.getStringOption()).isEqualTo("a prefix string");
     }
 
+    @Test
+    public void testPrivateBinderDefaults()
+    {
+        Injector injector = createInjector(ImmutableMap.of(), binder -> {
+            PrivateBinder privateBinder = binder.newPrivateBinder();
+            privateBinder.install(createModule(Config1.class, null, null, null));
+            privateBinder.bind(ExposeConfig.class).annotatedWith(named("no-prefix")).to(ExposeConfig.class).in(Scopes.SINGLETON);
+            privateBinder.expose(Key.get(ExposeConfig.class, named("no-prefix")));
+            getDefaultsSetter(privateBinder, null, null)
+                    .setStringOption("a string")
+                    .setBooleanOption(true)
+                    .setBoxedBooleanOption(true)
+                    .setByteOption(Byte.MAX_VALUE)
+                    .setBoxedByteOption(Byte.MAX_VALUE)
+                    .setShortOption(Short.MAX_VALUE)
+                    .setBoxedShortOption(Short.MAX_VALUE)
+                    .setIntegerOption(Integer.MAX_VALUE)
+                    .setBoxedIntegerOption(Integer.MAX_VALUE)
+                    .setLongOption(Long.MAX_VALUE)
+                    .setBoxedLongOption(Long.MAX_VALUE)
+                    .setFloatOption(Float.MAX_VALUE)
+                    .setBoxedFloatOption(Float.MAX_VALUE)
+                    .setDoubleOption(Double.MAX_VALUE)
+                    .setBoxedDoubleOption(Double.MAX_VALUE)
+                    .setMyEnumOption(MyEnum.FOO)
+                    .setValueClassOption(new ValueClass("a value class"));
+
+            privateBinder = binder.newPrivateBinder();
+            privateBinder.install(createModule(Config1.class, "prefix", null, null));
+            privateBinder.bind(ExposeConfig.class).annotatedWith(named("prefix")).to(ExposeConfig.class).in(Scopes.SINGLETON);
+            privateBinder.expose(Key.get(ExposeConfig.class, named("prefix")));
+            getDefaultsSetter(privateBinder, null, null)
+                    .setStringOption("a prefix string");
+
+        });
+        verifyConfig(injector.getInstance(Key.get(ExposeConfig.class, named("no-prefix"))).config1);
+        assertThat(injector.getInstance(Key.get(ExposeConfig.class, named("prefix"))).config1.getStringOption()).isEqualTo("a prefix string");
+    }
+
     private static void verifyConfig(Config1 config)
     {
         assertThat(config.getStringOption()).isEqualTo("a string");
