@@ -79,7 +79,7 @@ public class TestJettyHttpsClient
         super.testConnectTimeout();
     }
 
-    @Test(expectedExceptions = {SSLHandshakeException.class, EOFException.class})
+    @Test(expectedExceptions = {SSLHandshakeException.class, EOFException.class, IOException.class})
     public void testCertHostnameMismatch()
             throws Exception
     {
