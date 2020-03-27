@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
-import com.google.common.primitives.Ints;
 import com.proofpoint.bootstrap.AcceptRequests;
 import com.proofpoint.http.server.HttpServerBinder.HttpResourceBinding;
 import com.proofpoint.node.NodeInfo;
@@ -156,7 +155,7 @@ public class HttpServer
             }
         };
         threadPool.setMinThreads(config.getMinThreads());
-        threadPool.setIdleTimeout(Ints.checkedCast(config.getThreadMaxIdleTime().toMillis()));
+        threadPool.setIdleTimeout(Math.toIntExact(config.getThreadMaxIdleTime().toMillis()));
         threadPool.setName("http-worker");
         server = new Server(threadPool);
         server.setStopTimeout(config.getStopTimeout().toMillis());
@@ -259,7 +258,7 @@ public class HttpServer
             QueuedThreadPool adminThreadPool = new QueuedThreadPool(config.getAdminMaxThreads());
             adminThreadPool.setName("http-admin-worker");
             adminThreadPool.setMinThreads(config.getAdminMinThreads());
-            adminThreadPool.setIdleTimeout(Ints.checkedCast(config.getThreadMaxIdleTime().toMillis()));
+            adminThreadPool.setIdleTimeout(Math.toIntExact(config.getThreadMaxIdleTime().toMillis()));
 
             if (config.isHttpsEnabled()) {
                 adminConnector = createHttpsServerConnector(

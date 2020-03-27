@@ -16,7 +16,6 @@
 package com.proofpoint.http.client.balancing;
 
 import com.google.common.base.Ticker;
-import com.google.common.primitives.Ints;
 import com.proofpoint.stats.SparseCounterStat;
 import com.proofpoint.units.Duration;
 import org.weakref.jmx.Nested;
@@ -52,7 +51,7 @@ class TokenRetryBudget
 
         // compute the reserve by scaling retryBudgetMinPerSecond by retryBudgetRatioPeriod and retry cost
         // to allow for clients that've just started or have low rps
-        int reserve = retryBudgetMinPerSecond * Ints.checkedCast(retryBudgetRatioPeriod.roundTo(SECONDS)) * withdrawalAmount;
+        int reserve = retryBudgetMinPerSecond * Math.toIntExact(retryBudgetRatioPeriod.roundTo(SECONDS)) * withdrawalAmount;
         tokenBucket = new LeakyTokenBucket(retryBudgetRatioPeriod, reserve, ticker);
     }
 
