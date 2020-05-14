@@ -1,3 +1,11 @@
+Platform 2.31
+
+* Launcher
+
+  We added an "--inherit-output" option to "launcher start" to start a
+  detached process without redirecting the standard output and error to
+  /dev/null.
+
 Platform 2.30
 
 * Library Upgrades

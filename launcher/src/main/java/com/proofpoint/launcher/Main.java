@@ -327,7 +327,7 @@ public final class Main
         }
 
         @SuppressFBWarnings(value = "OS_OPEN_STREAM", justification = "false positive")
-        protected void start(List<String> args, boolean daemon)
+        protected void start(List<String> args, boolean daemon, boolean inherit)
         {
             if ("root".equals(System.getProperty("user.name"))) {
                 System.err.println("Cannot run as root");
@@ -502,15 +502,15 @@ public final class Main
                 ProcessBuilder processBuilder = new ProcessBuilder(javaArgs)
                         .directory(new File(dataDir))
                         .redirectInput(Processes.NULL_FILE);
-                if (daemon) {
-                    processBuilder = processBuilder
-                            .redirectOutput(Processes.NULL_FILE)
-                            .redirectError(Processes.NULL_FILE);
-                }
-                else {
+                if (inherit) {
                     processBuilder = processBuilder
                             .redirectOutput(Redirect.INHERIT)
                             .redirectError(Redirect.INHERIT);
+                }
+                else {
+                    processBuilder = processBuilder
+                            .redirectOutput(Processes.NULL_FILE)
+                            .redirectError(Processes.NULL_FILE);
                 }
                 child = processBuilder
                         .start();
@@ -724,10 +724,13 @@ public final class Main
         @Arguments(description = "Arguments to pass to server")
         public final List<String> args = new ArrayList<>();
 
+        @Option(name = "--inherit-output", description = "child process inherits stdout/stderr")
+        boolean inherit;
+
         @Override
         public void execute()
         {
-            start(args, true);
+            start(args, true, inherit);
         }
     }
 
@@ -740,7 +743,7 @@ public final class Main
         @Override
         public void execute()
         {
-            start(args, false);
+            start(args, false, true);
         }
     }
 
@@ -841,7 +844,7 @@ public final class Main
                 System.exit(killStatus.exitCode);
             }
 
-            start(args, true);
+            start(args, true, true);
         }
     }
 
@@ -868,7 +871,7 @@ public final class Main
                 System.exit(killStatus.exitCode);
             }
 
-            start(args, true);
+            start(args, true, true);
         }
     }
 
