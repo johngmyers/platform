@@ -16,14 +16,14 @@
 package com.proofpoint.configuration.testing;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.MapMaker;
 import com.proofpoint.configuration.ConfigurationFactory;
 import com.proofpoint.configuration.ConfigurationMetadata;
 import com.proofpoint.configuration.ConfigurationMetadata.AttributeMetadata;
 import com.proofpoint.configuration.MapClasses;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.implementation.InvocationHandlerAdapter;
+import net.bytebuddy.matcher.ElementMatchers;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -32,9 +32,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentMap;
 
+import static com.google.common.collect.Sets.newConcurrentHashSet;
 import static com.proofpoint.configuration.ConfigurationMetadata.isConfigClass;
+import static java.lang.String.format;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
@@ -62,7 +63,7 @@ public final class ConfigAssertions
         assertNotNull(properties, "properties");
         assertNotNull(expected, "expected");
 
-        @SuppressWarnings("unchecked") Class<T> configClass = (Class<T>) expected.getClass();
+        Class<T> configClass = getClass(expected);
         ConfigurationMetadata<T> metadata = ConfigurationMetadata.getValidConfigurationMetadata(configClass);
 
         // verify all supplied properties are supported and not deprecated
@@ -254,7 +255,7 @@ public final class ConfigAssertions
 
         T config = recordedConfigData.getInstance();
 
-        @SuppressWarnings("unchecked") Class<T> configClass = (Class<T>) config.getClass();
+        Class<T> configClass = getClass(config);
         ConfigurationMetadata<?> metadata = ConfigurationMetadata.getValidConfigurationMetadata(configClass);
 
         // collect information about the attributes that have been set
@@ -334,34 +335,45 @@ public final class ConfigAssertions
 
     public static <T> T recordDefaults(Class<T> type)
     {
-        final T instance = newDefaultInstance(type);
-        @SuppressWarnings("unchecked") T proxy = (T) Enhancer.create(type, new Class[]{$$RecordingConfigProxy.class}, new MethodInterceptor()
-        {
-            private final ConcurrentMap<Method, Object> invokedMethods = new MapMaker().makeMap();
+        Class<? extends T> loaded = new ByteBuddy()
+                .subclass(type)
+                .implement($$RecordingConfigProxy.class)
+                .method(ElementMatchers.any())
+                .intercept(createInvocationHandler(type))
+                .make()
+                .load(type.getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
+                .getLoaded();        final T instance = newDefaultInstance(type);
 
-            @Override
-            public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy)
-                    throws Throwable
-            {
-                if (GET_RECORDING_CONFIG_METHOD.equals(method)) {
-                    return new $$RecordedConfigData<>(instance, ImmutableSet.copyOf(invokedMethods.keySet()));
-                }
+        try {
+            return loaded.getConstructor().newInstance();
+        }
+        catch (ReflectiveOperationException e) {
+            throw new AssertionError("Failed to instantiate proxy class for " + type.getName(), e);
+        }
+   }
 
-                invokedMethods.put(method, Boolean.TRUE);
+    @SuppressWarnings("ObjectEquality")
+    private static <T> InvocationHandlerAdapter createInvocationHandler(Class<T> type)
+    {
+        T instance = newDefaultInstance(type);
+        Set<Method> invokedMethods = newConcurrentHashSet();
 
-                Object result = methodProxy.invoke(instance, args);
-                if (result == instance) {
-                    return proxy;
-                }
-                else {
-                    return result;
-                }
+        return InvocationHandlerAdapter.of((proxy, method, args) -> {
+            if (GET_RECORDING_CONFIG_METHOD.equals(method)) {
+                return new $$RecordedConfigData<>(instance, ImmutableSet.copyOf(invokedMethods));
             }
-        });
 
-        return proxy;
+            invokedMethods.add(method);
+
+            Object result = method.invoke(instance, args);
+            if (result == instance) {
+                return proxy;
+            }
+            return result;
+        });
     }
 
+    @SuppressWarnings("unchecked")
     static <T> $$RecordedConfigData<T> getRecordedConfig(T config)
     {
         if (!(config instanceof $$RecordingConfigProxy)) {
@@ -400,6 +412,11 @@ public final class ConfigAssertions
         $$RecordedConfigData<T> $$getRecordedConfig();
     }
 
+    @SuppressWarnings("unchecked")
+    private static <T> Class<T> getClass(T object)
+    {
+        return (Class<T>) object.getClass();
+    }
 
     private static <T> T newInstance(Class<T> configClass, Map<String, String> properties)
     {
@@ -411,8 +428,8 @@ public final class ConfigAssertions
     {
         try {
             return configClass.getDeclaredConstructor().newInstance();
-        } catch (Exception e) {
-            throw new AssertionError(String.format("Exception creating default instance of %s", configClass.getName()), e);
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError(format("Exception creating default instance of %s", configClass.getName()), e);
         }
     }
 
@@ -420,10 +437,8 @@ public final class ConfigAssertions
     {
         try {
             return getter.invoke(actual);
-        } catch (Exception e) {
-            AssertionError error = new AssertionError(String.format("Exception invoking %s", getter.toGenericString()));
-            error.initCause(e);
-            throw error;
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError(format("Exception invoking %s", getter.toGenericString()));
         }
     }
 }
