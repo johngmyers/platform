@@ -1,6 +1,5 @@
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
@@ -36,6 +35,7 @@ import javax.management.InstanceAlreadyExistsException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -154,7 +154,7 @@ public class TestReportingPrometheusModule
             reportBinder(binder).export(ReportedObject.class)
                     .withApplicationPrefix()
                     .withNamePrefix("TestObject")
-                    .withTags(ImmutableMap.of("2", "bar"));
+                    .withTags(Map.of("2", "bar"));
         });
 
         injector.getInstance(TestingBucketIdProvider.class).incrementBucket();
@@ -180,12 +180,12 @@ public class TestReportingPrometheusModule
             binder.bind(ReportedObject.class);
             reportBinder(binder).export(ReportedObject.class)
                     .withNamePrefix("TestObject")
-                    .withTags(ImmutableMap.of("foo", "bar"));
+                    .withTags(Map.of("foo", "bar"));
             binder.bind(ReportedObject.class).annotatedWith(Names.named("second")).to(ReportedObject.class);
             reportBinder(binder).export(ReportedObject.class)
                     .annotatedWith(Names.named("second"))
                     .withNamePrefix("TestObject")
-                    .withTags(ImmutableMap.of("baz", "quux", "a", "b", "c", "d\"\\\n"));
+                    .withTags(Map.of("baz", "quux", "a", "b", "c", "d\"\\\n"));
         });
 
         injector.getInstance(TestingBucketIdProvider.class).incrementBucket();
@@ -242,7 +242,7 @@ public class TestReportingPrometheusModule
         bucketIdProvider.incrementBucket();
 
         UnreportedValueObject unreportedValueObject = new UnreportedValueObject();
-        reportedBeanRegistry.register(unreportedValueObject, ReportedBean.forTarget(unreportedValueObject, bucketIdProvider), false, "TestObject", ImmutableMap.of());
+        reportedBeanRegistry.register(unreportedValueObject, ReportedBean.forTarget(unreportedValueObject, bucketIdProvider), false, "TestObject", Map.of());
 
         StringResponse response = client.execute(
                 prepareGet().setUri(uriFor("/metrics")).build(),

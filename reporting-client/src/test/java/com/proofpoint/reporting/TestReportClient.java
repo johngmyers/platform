@@ -18,7 +18,6 @@ package com.proofpoint.reporting;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Table;
@@ -66,8 +65,8 @@ public class TestReportClient
         );
 
         collectedData = HashBasedTable.create();
-        collectedData.put("Foo.Size", ImmutableMap.of(), 1.1);
-        collectedData.put("Foo.Ba:r.Size", ImmutableMap.of("tag1", "B\\a\"z"), 1.2);
+        collectedData.put("Foo.Size", Map.of(), 1.1);
+        collectedData.put("Foo.Ba:r.Size", Map.of("tag1", "B\\a\"z"), 1.2);
 
         httpClient = new TestingHttpClient(new TestingResponseFunction());
         sentJson = null;
@@ -114,15 +113,15 @@ public class TestReportClient
 
         ReportClient client = new ReportClient(nodeInfo, httpClient, new ReportClientConfig(), new ReportTagConfig(), objectMapper);
         collectedData = HashBasedTable.create();
-        collectedData.put("Foo.String", ImmutableMap.of(), "test value");
+        collectedData.put("Foo.String", Map.of(), "test value");
         client.report(TEST_TIME, collectedData);
         assertEquals(sentJson, List.of(
-                ImmutableMap.of(
+                Map.of(
                         "name", "Foo.String",
                         "timestamp", TEST_TIME,
                         "type", "string",
                         "value", "test value",
-                        "tags", ImmutableMap.of(
+                        "tags", Map.of(
                                 "application", "test-application",
                                 "host", "test.hostname",
                                 "environment", "test_environment",
@@ -137,7 +136,7 @@ public class TestReportClient
     {
         ReportClient client = new ReportClient(nodeInfo, httpClient,
                 new ReportClientConfig(), new ReportTagConfig()
-                        .setTags(ImmutableMap.of("foo", "ba:r", "baz", "quux")), objectMapper);
+                        .setTags(Map.of("foo", "ba:r", "baz", "quux")), objectMapper);
         client.report(TEST_TIME, collectedData);
         assertEquals(sentJson.size(), 2);
 
@@ -158,7 +157,7 @@ public class TestReportClient
     {
         ReportClient client = new ReportClient(nodeInfo, httpClient,
                 new ReportClientConfig().setPulseIncludeHostTag(false), new ReportTagConfig()
-                        .setTags(ImmutableMap.of("foo", "ba:r", "baz", "quux")), objectMapper);
+                        .setTags(Map.of("foo", "ba:r", "baz", "quux")), objectMapper);
         client.report(TEST_TIME, collectedData);
         assertEquals(sentJson.size(), 2);
 

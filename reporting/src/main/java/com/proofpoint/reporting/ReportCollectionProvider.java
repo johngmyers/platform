@@ -32,7 +32,7 @@ class ReportCollectionProvider<T> implements Provider<T>
     private final AtomicBoolean provided = new AtomicBoolean();
     private boolean applicationPrefix = false;
     private String namePrefix;
-    private Map<String, String> tags = ImmutableMap.of();
+    private Map<String, String> tags = Map.of();
     private String legacyName = null;
     private ReportCollectionFactory reportCollectionFactory;
 

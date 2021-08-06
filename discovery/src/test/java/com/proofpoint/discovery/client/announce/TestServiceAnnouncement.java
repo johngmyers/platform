@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client.announce;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import com.proofpoint.json.JsonCodec;
 import com.proofpoint.node.NodeInfo;
@@ -43,16 +42,16 @@ public class TestServiceAnnouncement
     @Test
     public void testBuilder()
     {
-        assertAnnouncement(serviceAnnouncement("foo").build(), "foo", ImmutableMap.of());
-        assertAnnouncement(serviceAnnouncement("foo").build(), "foo", ImmutableMap.of());
+        assertAnnouncement(serviceAnnouncement("foo").build(), "foo", Map.of());
+        assertAnnouncement(serviceAnnouncement("foo").build(), "foo", Map.of());
 
         assertAnnouncement(serviceAnnouncement("foo").addProperty("a", "apple").build(),
                 "foo",
-                ImmutableMap.of("a", "apple"));
+                Map.of("a", "apple"));
 
-        assertAnnouncement(serviceAnnouncement("foo").addProperties(ImmutableMap.of("a", "apple", "b", "banana")).build(),
+        assertAnnouncement(serviceAnnouncement("foo").addProperties(Map.of("a", "apple", "b", "banana")).build(),
                 "foo",
-                ImmutableMap.of("a", "apple", "b", "banana"));
+                Map.of("a", "apple", "b", "banana"));
     }
 
     @Test

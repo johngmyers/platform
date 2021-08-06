@@ -40,7 +40,7 @@ public class TestHttpServiceBalancerUriConfig
     public void testLegacyProperties()
     {
         assertLegacyEquivalence(HttpServiceBalancerUriConfig.class,
-                ImmutableMap.of("uri", "https://invalid.invalid"));
+                Map.of("uri", "https://invalid.invalid"));
     }
 
     @Test

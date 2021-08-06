@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -39,6 +38,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static com.proofpoint.discovery.client.DiscoveryBinder.discoveryBinder;
@@ -57,7 +57,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(),
+                Map.of(),
                 binder -> discoveryBinder(binder).bindServiceAnnouncement(new ServiceAnnouncementProvider().get())
         );
 
@@ -72,7 +72,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(),
+                Map.of(),
                 binder -> discoveryBinder(binder).bindServiceAnnouncement(ServiceAnnouncementProvider.class)
         );
 
@@ -87,7 +87,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(),
+                Map.of(),
                 binder -> discoveryBinder(binder).bindServiceAnnouncement(new ServiceAnnouncementProvider())
         );
 
@@ -102,7 +102,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(),
+                Map.of(),
                 binder -> discoveryBinder(binder).bindSelector("apple")
         );
 
@@ -114,7 +114,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(),
+                Map.of(),
                 binder -> discoveryBinder(binder).bindSelector(serviceType("apple"))
         );
 
@@ -126,7 +126,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of("discovery.apple.pool", "apple-pool"),
+                Map.of("discovery.apple.pool","apple-pool"),
                 binder -> discoveryBinder(binder).bindSelector("apple")
         );
 
@@ -138,7 +138,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of("discovery.apple.pool", "apple-pool"),
+                Map.of("discovery.apple.pool","apple-pool"),
                 binder -> discoveryBinder(binder).bindSelector(serviceType("apple"))
         );
 
@@ -150,7 +150,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(),
+                Map.of(),
                 binder -> discoveryBinder(binder).bindHttpBalancer("apple")
         );
 
@@ -162,7 +162,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(),
+                Map.of(),
                 binder -> discoveryBinder(binder).bindHttpBalancer(serviceType("apple"))
         );
 
@@ -174,7 +174,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of("discovery.apple.pool", "apple-pool"),
+                Map.of("discovery.apple.pool","apple-pool"),
                 binder -> discoveryBinder(binder).bindHttpBalancer("apple")
         );
 
@@ -186,7 +186,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of("discovery.apple.pool", "apple-pool"),
+                Map.of("discovery.apple.pool","apple-pool"),
                 binder -> discoveryBinder(binder).bindHttpBalancer(serviceType("apple"))
         );
 
@@ -198,7 +198,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(
+                Map.of(
                         "discovery.foo.pool", "foo-pool",
                         "foo.http-client.read-timeout", "1s",
                         "foo.http-client.max-attempts", "2"
@@ -214,7 +214,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(
+                Map.of(
                         "discovery.foo.pool", "foo-pool",
                         "bar.http-client.read-timeout", "1s",
                         "bar.http-client.max-attempts", "2"
@@ -229,7 +229,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of("discovery.foo.pool", "foo-pool"),
+                Map.of("discovery.foo.pool", "foo-pool"),
                 binder -> {
                     discoveryBinder(binder).bindDiscoveredHttpClient("foo", FooClient.class);
                     discoveryBinder(binder).bindDiscoveredHttpClient("foo", BarClient.class);
@@ -245,7 +245,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of("discovery.foo.pool", "foo-pool"),
+                Map.of("discovery.foo.pool", "foo-pool"),
                 binder -> discoveryBinder(binder).bindDiscoveredHttpClient("foo", FooClient.class)
                         .withAlias(FooAlias1.class)
                         .withAliases(List.of(FooAlias2.class, FooAlias3.class))
@@ -263,7 +263,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of(
+                Map.of(
                         "discovery.foo.pool", "foo-pool",
                         "discovery.bar.pool", "bar-pool"),
                 binder -> {
@@ -286,7 +286,7 @@ public class TestDiscoveryBinder
             throws Exception
     {
         Injector injector = createInjector(
-                ImmutableMap.of("discovery.foo.pool", "foo-pool"),
+                Map.of("discovery.foo.pool", "foo-pool"),
                 binder -> discoveryBinder(binder).bindDiscoveredHttpClient("foo", FooClient.class)
         );
 
@@ -302,7 +302,7 @@ public class TestDiscoveryBinder
         assertEquals(actualServiceSelector.getPool(), expectedPool);
     }
 
-    private static Injector createInjector(ImmutableMap<String, String> configurationProperties, Module module)
+    private static Injector createInjector(Map<String, String> configurationProperties, Module module)
             throws Exception
     {
         return Bootstrap.bootstrapTest()

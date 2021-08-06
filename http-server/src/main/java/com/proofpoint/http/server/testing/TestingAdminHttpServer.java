@@ -15,7 +15,6 @@
  */
 package com.proofpoint.http.server.testing;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.proofpoint.http.server.ClientAddressExtractor;
 import com.proofpoint.http.server.HttpServer;
@@ -81,7 +80,7 @@ public class TestingAdminHttpServer extends HttpServer
                 nodeInfo,
                 config,
                 servlet,
-                ImmutableMap.of(),
+                Map.of(),
                 ImmutableSet.of(),
                 ImmutableSet.of(),
                 adminServlet,

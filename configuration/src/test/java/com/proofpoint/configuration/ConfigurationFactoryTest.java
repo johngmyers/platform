@@ -102,16 +102,16 @@ public class ConfigurationFactoryTest
     @Test
     public void testModuleDefaults()
     {
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-value", "some value",
                 "boolean-value", "true"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-value", TEST_DEFAULTING_MODULE,
                 "boolean-value", TEST_DEFAULTING_MODULE
         );
         TestMonitor monitor = new TestMonitor();
-        Injector injector = createInjector(ImmutableMap.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(AnnotatedSetter.class));
+        Injector injector = createInjector(Map.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(AnnotatedSetter.class));
         AnnotatedSetter annotatedSetter = injector.getInstance(AnnotatedSetter.class);
         monitor.assertNumberOfErrors(0);
         monitor.assertNumberOfWarnings(0);
@@ -123,12 +123,12 @@ public class ConfigurationFactoryTest
     @Test
     public void testApplicationDefaults()
     {
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-value", "some value",
                 "boolean-value", "true"
         );
         TestMonitor monitor = new TestMonitor();
-        Injector injector = createInjector(ImmutableMap.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(AnnotatedSetter.class));
+        Injector injector = createInjector(Map.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(AnnotatedSetter.class));
         AnnotatedSetter annotatedSetter = injector.getInstance(AnnotatedSetter.class);
         monitor.assertNumberOfErrors(0);
         monitor.assertNumberOfWarnings(0);
@@ -140,15 +140,15 @@ public class ConfigurationFactoryTest
     @Test
     public void testPropertiesOverrideModuleDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "string-value", "some value",
                 "boolean-value", "false"
         );
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-value", "some default value",
                 "boolean-value", "true"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-value", TEST_DEFAULTING_MODULE,
                 "boolean-value", TEST_DEFAULTING_MODULE
         );
@@ -165,20 +165,20 @@ public class ConfigurationFactoryTest
     @Test
     public void testApplicationDefaultsOverrideModuleDefaults()
     {
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-value", "some value",
                 "boolean-value", "false"
         );
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-value", "some default value",
                 "boolean-value", "true"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-value", TEST_DEFAULTING_MODULE,
                 "boolean-value", TEST_DEFAULTING_MODULE
         );
         TestMonitor monitor = new TestMonitor();
-        Injector injector = createInjector(ImmutableMap.of(), applicationDefaults, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(AnnotatedSetter.class));
+        Injector injector = createInjector(Map.of(), applicationDefaults, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(AnnotatedSetter.class));
         AnnotatedSetter annotatedSetter = injector.getInstance(AnnotatedSetter.class);
         monitor.assertNumberOfErrors(0);
         monitor.assertNumberOfWarnings(0);
@@ -190,11 +190,11 @@ public class ConfigurationFactoryTest
     @Test
     public void testPropertiesOverrideApplicationDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "string-value", "some value",
                 "boolean-value", "false"
         );
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-value", "some default value",
                 "boolean-value", "true"
         );
@@ -263,15 +263,15 @@ public class ConfigurationFactoryTest
     @Test
     public void testConfigurationThroughLegacyConfigOverridesModuleDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "string-value", "this is a",
                 "string-b", "this is b"
         );
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-a", "some default value",
                 "string-b", "some other default value"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-a", TEST_DEFAULTING_MODULE,
                 "string-b", TEST_DEFAULTING_MODULE
         );
@@ -289,11 +289,11 @@ public class ConfigurationFactoryTest
     @Test
     public void testConfigurationThroughLegacyConfigOverridesApplicationDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "string-value", "this is a",
-                "string-b", "this is b"
+                "string-b",  "this is b"
         );
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-a", "some default value",
                 "string-b", "some other default value"
         );
@@ -375,17 +375,17 @@ public class ConfigurationFactoryTest
     @Test
     public void testLegacyModuleDefaultsThrows()
     {
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-value", "some default value",
                 "string-b", "some other default value"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-value", TEST_DEFAULTING_MODULE,
                 "string-b", TEST_DEFAULTING_MODULE
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(LegacyConfigPresent.class));
+            createInjector(Map.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(LegacyConfigPresent.class));
 
             fail("Expected an exception in object creation due to conflicting configuration");
         }
@@ -399,13 +399,13 @@ public class ConfigurationFactoryTest
     @Test
     public void testLegacyApplicationDefaultsThrows()
     {
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-value", "some default value",
                 "string-b", "some other default value"
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(LegacyConfigPresent.class));
+            createInjector(Map.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(LegacyConfigPresent.class));
 
             fail("Expected an exception in object creation due to conflicting configuration");
         }
@@ -451,16 +451,16 @@ public class ConfigurationFactoryTest
     @Test
     public void testModuleDefaultsThroughDeprecatedConfig()
     {
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-a", "this is a",
                 "string-b", "this is b"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-a", TEST_DEFAULTING_MODULE,
                 "string-b", TEST_DEFAULTING_MODULE
         );
         TestMonitor monitor = new TestMonitor();
-        Injector injector = createInjector(ImmutableMap.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(DeprecatedConfigPresent.class));
+        Injector injector = createInjector(Map.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(DeprecatedConfigPresent.class));
         DeprecatedConfigPresent deprecatedConfigPresent = injector.getInstance(DeprecatedConfigPresent.class);
         monitor.assertNumberOfErrors(0);
         monitor.assertNumberOfWarnings(0);
@@ -472,12 +472,12 @@ public class ConfigurationFactoryTest
     @Test
     public void testApplicationDefaultsThroughDeprecatedConfig()
     {
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-a", "this is a",
                 "string-b", "this is b"
         );
         TestMonitor monitor = new TestMonitor();
-        Injector injector = createInjector(ImmutableMap.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(DeprecatedConfigPresent.class));
+        Injector injector = createInjector(Map.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(DeprecatedConfigPresent.class));
         DeprecatedConfigPresent deprecatedConfigPresent = injector.getInstance(DeprecatedConfigPresent.class);
         monitor.assertNumberOfErrors(0);
         monitor.assertNumberOfWarnings(0);
@@ -508,17 +508,17 @@ public class ConfigurationFactoryTest
     @Test
     public void testDefunctPropertyInModuleDefaultsThrows()
     {
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-value", "this is a",
                 "defunct-value", "this shouldn't work"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-value", TEST_DEFAULTING_MODULE,
                 "defunct-value", TEST_DEFAULTING_MODULE
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(DefunctConfigPresent.class));
+            createInjector(Map.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(DefunctConfigPresent.class));
 
             fail("Expected an exception in object creation due to use of defunct config");
         }
@@ -532,13 +532,13 @@ public class ConfigurationFactoryTest
     @Test
     public void testDefunctPropertyInApplicationDefaultsThrows()
     {
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-value", "this is a",
                 "defunct-value", "this shouldn't work"
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(DefunctConfigPresent.class));
+            createInjector(Map.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(DefunctConfigPresent.class));
 
             fail("Expected an exception in object creation due to use of defunct config");
         }
@@ -606,7 +606,7 @@ public class ConfigurationFactoryTest
     @Test
     public void testFailedBeanValidationThrows()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 // string-value left at invalid default
                 "int-value", "5000"  // out of range
         );
@@ -627,15 +627,15 @@ public class ConfigurationFactoryTest
     @Test
     public void testMapModuleDefaultsThrows()
     {
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "map-a.k3", "this is a"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "map-a.k3", TEST_DEFAULTING_MODULE
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
+            createInjector(Map.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
 
             fail("Expected an exception in object creation due to use of application default for map config");
         }
@@ -649,15 +649,15 @@ public class ConfigurationFactoryTest
     @Test
     public void testMapValueModuleDefaultsThrows()
     {
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "map-b.k3.string-value", "this is a"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "map-b.k3.string-value", TEST_DEFAULTING_MODULE
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
+            createInjector(Map.of(), null, moduleDefaults, moduleDefaultSource, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
 
             fail("Expected an exception in object creation due to use of application default for map config");
         }
@@ -671,12 +671,12 @@ public class ConfigurationFactoryTest
     @Test
     public void testMapApplicationDefaultsThrows()
     {
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "map-a.k3", "this is a"
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
+            createInjector(Map.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
 
             fail("Expected an exception in object creation due to use of application default for map config");
         }
@@ -690,12 +690,12 @@ public class ConfigurationFactoryTest
     @Test
     public void testMapValueApplicationDefaultsThrows()
     {
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "map-b.k3.string-value", "this is a"
         );
         TestMonitor monitor = new TestMonitor();
         try {
-            createInjector(ImmutableMap.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
+            createInjector(Map.of(), applicationDefaults, null, null, monitor, binder -> bindConfig(binder).bind(MapConfigPresent.class));
 
             fail("Expected an exception in object creation due to use of application default for map config");
         }
@@ -719,8 +719,8 @@ public class ConfigurationFactoryTest
         monitor.assertNumberOfWarnings(1);
         monitor.assertMatchingWarningRecorded("map-value", "replaced", "Use 'map-a'");
         assertNotNull(legacyMapConfigPresent);
-        assertEquals(legacyMapConfigPresent.getMapA(), ImmutableMap.of("k", "this is a"));
-        assertEquals(legacyMapConfigPresent.getMapB(), ImmutableMap.of("k2", "this is b"));
+        assertEquals(legacyMapConfigPresent.getMapA(), Map.of("k","this is a"));
+        assertEquals(legacyMapConfigPresent.getMapB(), Map.of("k2","this is b"));
     }
 
     @Test
@@ -747,7 +747,7 @@ public class ConfigurationFactoryTest
     @Test
     public void testConfigurationWithRedundantDeprecatedMapConfigThrows()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "map-value.k", "this is a",
                 "deprecated-map-value.k3", "this is a",
                 "map-b.k2", "this is b"
@@ -780,8 +780,8 @@ public class ConfigurationFactoryTest
         monitor.assertNumberOfWarnings(1);
         monitor.assertMatchingWarningRecorded("map-a", "deprecated and should not be used");
         assertNotNull(deprecatedMapConfigPresent);
-        assertEquals(deprecatedMapConfigPresent.getMapA(), ImmutableMap.of("k1", "this is a"));
-        assertEquals(deprecatedMapConfigPresent.getMapB(), ImmutableMap.of("k2", "this is b"));
+        assertEquals(deprecatedMapConfigPresent.getMapA(), Map.of("k1","this is a"));
+        assertEquals(deprecatedMapConfigPresent.getMapB(), Map.of("k2","this is b"));
     }
 
     @Test
@@ -990,9 +990,9 @@ public class ConfigurationFactoryTest
     {
         ConfigurationFactory configurationFactory = new ConfigurationFactory(
                 properties,
-                firstNonNull(applicationDefaults, ImmutableMap.of()),
-                firstNonNull(moduleDefaults, ImmutableMap.of()),
-                firstNonNull(moduleDefaultSource, ImmutableMap.of()),
+                firstNonNull(applicationDefaults, Map.of()),
+                firstNonNull(moduleDefaults, Map.of()),
+                firstNonNull(moduleDefaultSource, Map.of()),
                 Collections.emptySet(),
                 List.of(),
                 monitor);

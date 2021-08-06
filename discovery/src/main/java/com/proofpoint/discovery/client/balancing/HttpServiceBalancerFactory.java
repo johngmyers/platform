@@ -15,12 +15,10 @@
  */
 package com.proofpoint.discovery.client.balancing;
 
-import com.google.common.collect.ImmutableMap;
 import com.proofpoint.discovery.client.DiscoveryLookupClient;
 import com.proofpoint.discovery.client.ForDiscoveryClient;
 import com.proofpoint.discovery.client.ServiceDescriptorsUpdater;
 import com.proofpoint.discovery.client.ServiceSelectorConfig;
-import com.proofpoint.discovery.client.balancing.StaticHttpServiceConfig.UriMultiset;
 import com.proofpoint.http.client.balancing.HttpServiceBalancer;
 import com.proofpoint.http.client.balancing.HttpServiceBalancerConfig;
 import com.proofpoint.http.client.balancing.HttpServiceBalancerImpl;
@@ -66,7 +64,7 @@ public final class HttpServiceBalancerFactory
         requireNonNull(balancerConfig, "balancerConfig is null");
 
         String pool = firstNonNull(selectorConfig.getPool(), nodeInfo.getPool());
-        Map<String, String> tags = ImmutableMap.of("serviceType", type);
+        Map<String, String> tags = Map.of("serviceType", type);
         HttpServiceBalancerStats httpServiceBalancerStats = reportCollectionFactory.createReportCollection(HttpServiceBalancerStats.class, false, "ServiceClient", tags);
         HttpServiceBalancerImpl balancer = new HttpServiceBalancerImpl(format("type=[%s], pool=[%s]", type, pool), httpServiceBalancerStats, balancerConfig);
         reportExporter.export(balancer, false, "ServiceClient", tags);
@@ -82,7 +80,7 @@ public final class HttpServiceBalancerFactory
         requireNonNull(balancerConfig, "balancerConfig is null");
         requireNonNull(uris, "uris is null");
 
-        Map<String, String> tags = ImmutableMap.of("serviceType", type);
+        Map<String, String> tags = Map.of("serviceType", type);
         HttpServiceBalancerStats httpServiceBalancerStats = reportCollectionFactory.createReportCollection(HttpServiceBalancerStats.class, false, "ServiceClient", tags);
         HttpServiceBalancerImpl balancer = new HttpServiceBalancerImpl(format("type=[%s]", type), httpServiceBalancerStats, balancerConfig);
         balancer.updateHttpUris(uris);

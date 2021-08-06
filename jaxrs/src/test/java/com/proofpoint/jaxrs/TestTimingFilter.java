@@ -156,7 +156,7 @@ public class TestTimingFilter
 
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
 
-        assertEquals(data.row("TestingTimingResource.RequestTime.Max"), ImmutableMap.of(ImmutableMap.of("method", expectedMethod, "responseCode", "204", "responseCodeFamily", "2"), expectedValue));
+        assertEquals(data.row("TestingTimingResource.RequestTime.Max"), Map.of(Map.of("method", expectedMethod, "responseCode", "204", "responseCodeFamily", "2"),expectedValue));
     }
 
     @Test
@@ -170,7 +170,7 @@ public class TestTimingFilter
 
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
 
-        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), ImmutableMap.of(ImmutableMap.of("method", "testGet", "responseCode", "204", "responseCodeFamily", "2", "tag", "value1"), 1.0));
+        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), Map.of(Map.of("method", "testGet", "responseCode", "204", "responseCodeFamily", "2", "tag", "value1"),1.0));
     }
 
     @Test
@@ -184,7 +184,7 @@ public class TestTimingFilter
 
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
 
-        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), ImmutableMap.of(ImmutableMap.of("method", "testPut", "responseCode", "204", "responseCodeFamily", "2", "tag2", "1"), 2.0));
+        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), Map.of(Map.of("method", "testPut", "responseCode", "204", "responseCodeFamily", "2", "tag2", "1"),2.0));
     }
 
     @Test
@@ -198,7 +198,7 @@ public class TestTimingFilter
 
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
 
-        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), ImmutableMap.of(
+        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), Map.of(
                 ImmutableMap.<String, String>builder()
                         .put("method", "testPost")
                         .put("responseCode", "204")
@@ -223,7 +223,7 @@ public class TestTimingFilter
 
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
 
-        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), ImmutableMap.of(ImmutableMap.of("method", "testDelete", "responseCode", "204", "responseCodeFamily", "2", "tag", "true"), 9.0));
+        assertEquals(data.row("TestingAnnotatedTimingResource.RequestTime.Max"), Map.of(Map.of("method", "testDelete", "responseCode", "204", "responseCodeFamily", "2", "tag", "true"),9.0));
     }
 
     @Test(expectedExceptions = CreationException.class,

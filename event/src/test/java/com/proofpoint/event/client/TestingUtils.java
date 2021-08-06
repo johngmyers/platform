@@ -48,7 +48,7 @@ final class TestingUtils
                 .put("host", "localhost")
                 .put("timestamp", "2011-09-09T01:35:28.333Z")
                 .put("traceToken", "sample-trace-token")
-                .put("data", ImmutableMap.of("intValue", 5678, "stringValue", "foo"))
+                .put("data", Map.of("intValue", 5678, "stringValue", "foo"))
                 .build()
         ));
         expected.add(new LinkedHashMap<>(ImmutableMap.<String, Object>builder()
@@ -57,7 +57,7 @@ final class TestingUtils
                 .put("host", "localhost")
                 .put("timestamp", "2011-09-09T01:43:18.123Z")
                 .put("traceToken", "sample-trace-token")
-                .put("data", ImmutableMap.of("intValue", 1, "stringValue", "bar"))
+                .put("data", Map.of("intValue", 1, "stringValue", "bar"))
                 .build()
         ));
         expected.add(new LinkedHashMap<>(ImmutableMap.<String, Object>builder()
@@ -66,7 +66,7 @@ final class TestingUtils
                 .put("host", "localhost")
                 .put("timestamp", "2011-09-09T01:45:55.555Z")
                 .put("traceToken", "sample-trace-token")
-                .put("data", ImmutableMap.of("intValue", 1234, "stringValue", "hello"))
+                .put("data", Map.of("intValue", 1234, "stringValue", "hello"))
                 .build()
         ));
 

@@ -15,7 +15,6 @@
  */
 package com.proofpoint.http.server.testing;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.proofpoint.http.server.ClientAddressExtractor;
 import com.proofpoint.http.server.HttpServer;
@@ -85,7 +84,7 @@ public class TestingHttpServer extends HttpServer
                 ImmutableSet.copyOf(filters),
                 resources,
                 null,
-                ImmutableMap.of(),
+                Map.of(),
                 ImmutableSet.of(),
                 null,
                 null,

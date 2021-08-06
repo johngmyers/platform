@@ -17,7 +17,6 @@ package com.proofpoint.audit.testing;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -29,6 +28,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.proofpoint.audit.AuditLoggerBinder.auditLoggerBinder;
 import static org.testng.Assert.assertEquals;
@@ -59,7 +59,7 @@ public class TestTestingAuditLogModule
     {
         logger.audit(record1);
 
-        assertEquals(auditLog.getRecords(), List.of(ImmutableMap.of(
+        assertEquals(auditLog.getRecords(), List.of(Map.of(
                 "type", "com.proofpoint.audit.testing.TestTestingAuditLogModule.TestingRecord",
                 "value", "record1"))
         );
@@ -75,12 +75,12 @@ public class TestTestingAuditLogModule
         logger.audit(record3);
 
         assertEquals(auditLog.getRecords(), List.of(
-                ImmutableMap.of("type", "com.proofpoint.audit.testing.TestTestingAuditLogModule.TestingRecord",
+                Map.of("type", "com.proofpoint.audit.testing.TestTestingAuditLogModule.TestingRecord",
                                 "value", "record1"),
-                ImmutableMap.of("type", "com.proofpoint.audit.testing.TestTestingAuditLogModule.TestingRecord",
-                                "traceToken", ImmutableMap.of("id", "token1"),
+                Map.of("type", "com.proofpoint.audit.testing.TestTestingAuditLogModule.TestingRecord",
+                                "traceToken", Map.of("id", "token1"),
                                 "value", "record2"),
-                ImmutableMap.of("type", "com.proofpoint.audit.testing.TestTestingAuditLogModule.TestingRecord",
+                Map.of("type", "com.proofpoint.audit.testing.TestTestingAuditLogModule.TestingRecord",
                                 "value", "record3")
         ));
     }

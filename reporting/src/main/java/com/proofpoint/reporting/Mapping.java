@@ -28,7 +28,7 @@ class Mapping
     private Key<?> key;
     private boolean applicationPrefix = false;
     private String namePrefix;
-    private Map<String, String> tags = ImmutableMap.of();
+    private Map<String, String> tags = Map.of();
     private String legacyName = null;
 
     Mapping(Key<?> key, String namePrefix)

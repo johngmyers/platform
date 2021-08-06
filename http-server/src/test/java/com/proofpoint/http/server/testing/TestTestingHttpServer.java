@@ -15,7 +15,6 @@
  */
 package com.proofpoint.http.server.testing;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.net.HttpHeaders;
 import com.google.common.net.MediaType;
@@ -83,7 +82,7 @@ public class TestTestingHttpServer
             throws Exception
     {
         DummyServlet servlet = new DummyServlet();
-        Map<String, String> params = ImmutableMap.of("sampleInitParameter", "the value");
+        Map<String, String> params = Map.of("sampleInitParameter", "the value");
         TestingHttpServer server = createTestingHttpServer(servlet, params);
 
         try {
@@ -101,7 +100,7 @@ public class TestTestingHttpServer
             throws Exception
     {
         DummyServlet servlet = new DummyServlet();
-        TestingHttpServer server = createTestingHttpServer(servlet, ImmutableMap.of());
+        TestingHttpServer server = createTestingHttpServer(servlet, Map.of());
 
         try {
             server.start();
@@ -124,7 +123,7 @@ public class TestTestingHttpServer
     {
         DummyServlet servlet = new DummyServlet();
         DummyFilter filter = new DummyFilter();
-        TestingHttpServer server = createTestingHttpServerWithFilter(servlet, ImmutableMap.of(), filter);
+        TestingHttpServer server = createTestingHttpServerWithFilter(servlet, Map.of(), filter);
 
         try {
             server.start();
@@ -156,7 +155,7 @@ public class TestTestingHttpServer
                             binder.bind(Servlet.class).annotatedWith(TheServlet.class).toInstance(servlet);
                             binder.bind(new TypeLiteral<Map<String, String>>()
                             {
-                            }).annotatedWith(TheServlet.class).toInstance(ImmutableMap.of());
+                            }).annotatedWith(TheServlet.class).toInstance(Map.of());
                         })
                 .initialize();
 
@@ -189,7 +188,7 @@ public class TestTestingHttpServer
                             binder.bind(Servlet.class).annotatedWith(TheServlet.class).toInstance(servlet);
                             binder.bind(new TypeLiteral<Map<String, String>>()
                             {
-                            }).annotatedWith(TheServlet.class).toInstance(ImmutableMap.of());
+                            }).annotatedWith(TheServlet.class).toInstance(Map.of());
                             newSetBinder(binder, Filter.class, TheServlet.class).addBinding().toInstance(filter);
                         })
                 .initialize();
@@ -224,7 +223,7 @@ public class TestTestingHttpServer
                             binder.bind(Servlet.class).annotatedWith(TheServlet.class).toInstance(servlet);
                             binder.bind(new TypeLiteral<Map<String, String>>()
                             {
-                            }).annotatedWith(TheServlet.class).toInstance(ImmutableMap.of());
+                            }).annotatedWith(TheServlet.class).toInstance(Map.of());
                             httpServerBinder(binder).bindResource("/", "webapp/user").withWelcomeFile("user-welcome.txt");
                             httpServerBinder(binder).bindResource("/", "webapp/user2");
                             httpServerBinder(binder).bindResource("path", "webapp/user").withWelcomeFile("user-welcome.txt");

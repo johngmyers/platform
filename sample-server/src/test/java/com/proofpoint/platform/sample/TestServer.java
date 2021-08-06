@@ -15,7 +15,6 @@
  */
 package com.proofpoint.platform.sample;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
 import com.proofpoint.bootstrap.LifeCycleManager;
 import com.proofpoint.http.client.HttpClient;
@@ -62,7 +61,7 @@ public class TestServer
 {
     private static final int NOT_ALLOWED = 405;
 
-    private final Map<String, Object> personJsonStructure = ImmutableMap.of(
+    private final Map<String, Object> personJsonStructure = Map.of(
             "name", "Mr Foo",
             "email", "foo@example.com"
     );
@@ -125,9 +124,9 @@ public class TestServer
         store.put("bar", createPerson("bar@example.com", "Mr Bar"));
         store.put("foo", createPerson("foo@example.com", "Mr Foo"));
 
-        Object expected = ImmutableMap.of(
-                "foo", ImmutableMap.of("name", "Mr Foo", "email", "foo@example.com"),
-                "bar", ImmutableMap.of("name", "Mr Bar", "email", "bar@example.com")
+        Object expected = Map.of(
+                "foo", Map.of("name", "Mr Foo", "email", "foo@example.com"),
+                "bar", Map.of("name", "Mr Bar", "email", "bar@example.com")
         );
 
         Object actual = client.execute(
@@ -155,7 +154,7 @@ public class TestServer
 
         URI requestUri = uriFor("/v1/person/foo");
 
-        Map<String, String> expected = ImmutableMap.of("name", "Mr Foo", "email", "foo@example.com");
+        Map<String, String> expected = Map.of("name", "Mr Foo", "email", "foo@example.com");
 
         Map<String, Object> actual = client.execute(
                 prepareGet().setUri(requestUri).build(),

@@ -16,7 +16,6 @@
 package com.proofpoint.configuration;
 
 import com.google.common.collect.ForwardingMap;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.ConfigurationException;
 import com.proofpoint.configuration.ConfigurationMetadata.AttributeMetadata;
@@ -2006,7 +2005,7 @@ public class ConfigurationMetadataTest
             @Override
             protected Map<String, Class<?>> delegate()
             {
-                return ImmutableMap.of();
+                return Map.of();
             }
 
             public ImplementsMap fromString(String value)

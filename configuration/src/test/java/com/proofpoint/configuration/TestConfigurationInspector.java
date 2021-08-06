@@ -1,6 +1,5 @@
 package com.proofpoint.configuration;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.inject.Binder;
 import com.google.inject.Guice;
@@ -58,9 +57,9 @@ public class TestConfigurationInspector
     {
         ConfigurationFactory configurationFactory = new ConfigurationFactory(
                 properties,
-                firstNonNull(applicationDefaults, ImmutableMap.of()),
-                firstNonNull(moduleDefaults, ImmutableMap.of()),
-                firstNonNull(moduleDefaultSource, ImmutableMap.of()),
+                firstNonNull(applicationDefaults, Map.of()),
+                firstNonNull(moduleDefaults, Map.of()),
+                firstNonNull(moduleDefaultSource, Map.of()),
                 properties.keySet(),
                 List.of(),
                 Problems.NULL_MONITOR
@@ -109,15 +108,15 @@ public class TestConfigurationInspector
     @Test
     public void testSimpleConfigWithModuleDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "string-value", "some value",
                 "boolean-value", "false"
         );
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-value", "some default value",
                 "boolean-value", "true"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-value", TEST_DEFAULTING_MODULE,
                 "boolean-value", TEST_DEFAULTING_MODULE
         );
@@ -131,11 +130,11 @@ public class TestConfigurationInspector
     @Test
     public void testSimpleConfigWithApplicationDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "string-value", "some value",
                 "boolean-value", "false"
         );
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-value", "some default value",
                 "boolean-value", "true"
         );
@@ -148,19 +147,19 @@ public class TestConfigurationInspector
     @Test
     public void testSimpleConfigWithModuleAndApplicationDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "string-value", "some value",
                 "boolean-value", "false"
         );
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "string-value", "some default value",
                 "boolean-value", "true"
         );
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "string-value", "some module default value",
                 "boolean-value", "true"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "string-value", TEST_DEFAULTING_MODULE,
                 "boolean-value", TEST_DEFAULTING_MODULE
         );
@@ -185,13 +184,13 @@ public class TestConfigurationInspector
     @Test
     public void testSecuritySensitiveConfigWithModuleDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "value", "some value"
         );
-        Map<String, String> moduleDefaults = ImmutableMap.of(
+        Map<String, String> moduleDefaults = Map.of(
                 "value", "some default value"
         );
-        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = ImmutableMap.of(
+        Map<String, ConfigurationDefaultingModule> moduleDefaultSource = Map.of(
                 "value", TEST_DEFAULTING_MODULE
         );
         inspect(properties, null, moduleDefaults, moduleDefaultSource, binder -> bindConfig(binder).bind(SetterSensitiveClass.class))
@@ -203,10 +202,10 @@ public class TestConfigurationInspector
     @Test
     public void testSecuritySensitiveConfigWithApplicationDefaults()
     {
-        Map<String, String> properties = ImmutableMap.of(
+        Map<String, String> properties = Map.of(
                 "value", "some value"
         );
-        Map<String, String> applicationDefaults = ImmutableMap.of(
+        Map<String, String> applicationDefaults = Map.of(
                 "value", "some default value"
         );
         inspect(properties, applicationDefaults, null, null, binder -> bindConfig(binder).bind(SetterSensitiveClass.class))

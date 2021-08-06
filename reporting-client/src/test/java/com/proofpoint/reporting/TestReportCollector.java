@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import com.proofpoint.node.NodeConfig;
@@ -39,7 +38,7 @@ import static org.testng.Assert.assertEquals;
 
 public class TestReportCollector
 {
-    private static final ImmutableMap<String, String> EXPECTED_VERSION_TAGS = ImmutableMap.of("applicationVersion", "1.2", "platformVersion", "platform.1");
+    private static final Map<String, String> EXPECTED_VERSION_TAGS = Map.of("applicationVersion", "1.2", "platformVersion", "platform.1");
 
     private MinuteBucketIdProvider bucketIdProvider;
     private ReportedBeanRegistry reportedBeanRegistry;
@@ -65,9 +64,9 @@ public class TestReportCollector
             throws Exception
     {
         Object reported = new ReportedObject();
-        reportedBeanRegistry.register(reported, ReportedBean.forTarget(reported, bucketIdProvider), false, "TestObject", ImmutableMap.of());
+        reportedBeanRegistry.register(reported, ReportedBean.forTarget(reported, bucketIdProvider), false, "TestObject", Map.of());
 
-        assertMetricsCollected("TestObject.Metric", ImmutableMap.of());
+        assertMetricsCollected("TestObject.Metric", Map.of());
     }
 
     @Test
@@ -75,9 +74,9 @@ public class TestReportCollector
             throws Exception
     {
         Object reported = new ReportedObject();
-        reportedBeanRegistry.register(reported, ReportedBean.forTarget(reported, bucketIdProvider), true, "TestObject", ImmutableMap.of("foo", "bar"));
+        reportedBeanRegistry.register(reported, ReportedBean.forTarget(reported, bucketIdProvider), true, "TestObject", Map.of("foo", "bar"));
 
-        assertMetricsCollected("TestApplication.TestObject.Metric", ImmutableMap.of("foo", "bar"));
+        assertMetricsCollected("TestApplication.TestObject.Metric", Map.of("foo", "bar"));
     }
 
     @Test
@@ -87,7 +86,7 @@ public class TestReportCollector
         ObjectName objectName = ObjectName.getInstance("com.proofpoint.reporting.test:name=TestObject,foo=bar");
         reportedBeanRegistry.register(ReportedBean.forTarget(new ReportedObject(), bucketIdProvider), objectName);
 
-        assertMetricsCollected("TestObject.Metric", ImmutableMap.of("foo", "bar"));
+        assertMetricsCollected("TestObject.Metric", Map.of("foo", "bar"));
     }
 
     private void assertMetricsCollected(String expectedMetricName, Map<String, String> expectedTags)
@@ -257,7 +256,7 @@ public class TestReportCollector
                 throw new UnsupportedOperationException();
             }
         };
-        reportedBeanRegistry.register(reported, ReportedBean.forTarget(reported, bucketIdProvider), false, "TestObject", ImmutableMap.of());
+        reportedBeanRegistry.register(reported, ReportedBean.forTarget(reported, bucketIdProvider), false, "TestObject", Map.of());
 
         reportCollector.collectData();
 
@@ -266,17 +265,17 @@ public class TestReportCollector
 
         Table<String, Map<String, String>, Object> table = tableCaptor.getValue();
         assertEqualsIgnoreOrder(table.cellSet(), ImmutableTable.<String, Map<String, String>, Object>builder()
-                .put("TestObject.DoubleMetric", ImmutableMap.of(), 0.0)
-                .put("TestObject.FloatMetric", ImmutableMap.of(), 0F)
-                .put("TestObject.LongMetric", ImmutableMap.of(), 0L)
-                .put("TestObject.IntegerMetric", ImmutableMap.of(), 0)
-                .put("TestObject.ShortMetric", ImmutableMap.of(), (short) 0)
-                .put("TestObject.ByteMetric", ImmutableMap.of(), (byte) 0)
-                .put("TestObject.MaxByteMetric", ImmutableMap.of(), Byte.MAX_VALUE)
-                .put("TestObject.MinByteMetric", ImmutableMap.of(), Byte.MIN_VALUE)
-                .put("TestObject.FalseBooleanMetric", ImmutableMap.of(), 0)
-                .put("TestObject.TrueBooleanMetric", ImmutableMap.of(), 1)
-                .put("TestObject.TestingValueMetric", ImmutableMap.of(), "testing toString value")
+                .put("TestObject.DoubleMetric", Map.of(), 0.0)
+                .put("TestObject.FloatMetric", Map.of(), 0F)
+                .put("TestObject.LongMetric", Map.of(), 0L)
+                .put("TestObject.IntegerMetric", Map.of(), 0)
+                .put("TestObject.ShortMetric", Map.of(), (short) 0)
+                .put("TestObject.ByteMetric", Map.of(), (byte) 0)
+                .put("TestObject.MaxByteMetric", Map.of(), Byte.MAX_VALUE)
+                .put("TestObject.MinByteMetric", Map.of(), Byte.MIN_VALUE)
+                .put("TestObject.FalseBooleanMetric", Map.of(), 0)
+                .put("TestObject.TrueBooleanMetric", Map.of(), 1)
+                .put("TestObject.TestingValueMetric", Map.of(), "testing toString value")
                 .put("ReportCollector.NumMetrics", EXPECTED_VERSION_TAGS, 11)
                 .build()
                 .cellSet());

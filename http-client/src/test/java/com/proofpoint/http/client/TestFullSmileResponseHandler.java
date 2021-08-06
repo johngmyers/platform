@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.dataformat.smile.SmileFactory;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.net.MediaType;
 import com.proofpoint.json.JsonCodec;
 import org.testng.annotations.BeforeMethod;
@@ -15,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.util.Map;
 
 import static com.google.common.net.MediaType.PLAIN_TEXT_UTF_8;
 import static com.proofpoint.http.client.FullSmileResponseHandler.SmileResponse;
@@ -53,7 +53,7 @@ public class TestFullSmileResponseHandler
     @Test
     public void testValidSmile()
     {
-        SmileResponse<User> response = handler.handle(null, createSmileResponse(OK, ImmutableMap.of(
+        SmileResponse<User> response = handler.handle(null, createSmileResponse(OK, Map.of(
                 "name", "Joe",
                 "age", 25,
                 "extra", true
@@ -67,7 +67,7 @@ public class TestFullSmileResponseHandler
     @Test
     public void testInvalidSmile()
     {
-        SmileResponse<User> response = handler.handle(null, createSmileResponse(OK, ImmutableMap.of(
+        SmileResponse<User> response = handler.handle(null, createSmileResponse(OK, Map.of(
                 "age", "foo"
         )));
 
@@ -82,7 +82,7 @@ public class TestFullSmileResponseHandler
     @Test
     public void testInvalidSmileGetValue()
     {
-        SmileResponse<User> response = handler.handle(null, createSmileResponse(OK, ImmutableMap.of(
+        SmileResponse<User> response = handler.handle(null, createSmileResponse(OK, Map.of(
                 "age", "foo"
         )));
 
@@ -118,7 +118,7 @@ public class TestFullSmileResponseHandler
     @Test
     public void testSmileErrorResponse()
     {
-        SmileResponse<User> response = handler.handle(null, createSmileResponse(INTERNAL_SERVER_ERROR, ImmutableMap.of(
+        SmileResponse<User> response = handler.handle(null, createSmileResponse(INTERNAL_SERVER_ERROR, Map.of(
                 "error", true
         )));
 

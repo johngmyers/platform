@@ -15,8 +15,9 @@
  */
 package com.proofpoint.platform.sample;
 
-import com.google.common.collect.ImmutableMap;
 import org.testng.annotations.Test;
+
+import java.util.Map;
 
 import static com.proofpoint.json.testing.JsonTester.assertJsonEncode;
 import static com.proofpoint.platform.sample.Person.createPerson;
@@ -39,7 +40,7 @@ public class TestPerson
     public void testJsonEncode()
     {
         assertJsonEncode(createPerson("alice@example.com", "Alice"),
-                ImmutableMap.of(
+                Map.of(
                         "name", "Alice",
                         "email", "alice@example.com"
                 ));

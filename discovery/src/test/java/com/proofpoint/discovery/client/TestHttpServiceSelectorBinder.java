@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -32,6 +31,7 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.proofpoint.discovery.client.DiscoveryBinder.discoveryBinder;
@@ -50,7 +50,7 @@ public class TestHttpServiceSelectorBinder
     {
         injector = Guice.createInjector(
                 new ApplicationNameModule("test-application"),
-                new ConfigurationModule(new ConfigurationFactory(ImmutableMap.of())),
+                new ConfigurationModule(new ConfigurationFactory(Map.of())),
                 new TestingNodeModule(),
                 new TestingDiscoveryModule(),
                 new ReportingModule(),
@@ -77,7 +77,7 @@ public class TestHttpServiceSelectorBinder
     {
         injector = Guice.createInjector(
                 new ApplicationNameModule("test-application"),
-                new ConfigurationModule(new ConfigurationFactory(ImmutableMap.of())),
+                new ConfigurationModule(new ConfigurationFactory(Map.of())),
                 new TestingNodeModule(),
                 new TestingDiscoveryModule(),
                 new ReportingModule(),

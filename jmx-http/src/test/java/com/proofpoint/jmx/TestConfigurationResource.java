@@ -15,7 +15,6 @@
  */
 package com.proofpoint.jmx;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Injector;
@@ -78,7 +77,7 @@ public class TestConfigurationResource
                         new TestingDiscoveryModule(),
                         binder -> bindConfig(binder).bind(TestingConfig.class)
                 )
-                .setRequiredConfigurationProperties(ImmutableMap.of(
+                .setRequiredConfigurationProperties(Map.of(
                         "testing.duration", "3m",
                         "testing.password", "password1"
                 ))

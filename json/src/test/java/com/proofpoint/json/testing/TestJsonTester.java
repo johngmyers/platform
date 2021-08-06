@@ -17,7 +17,6 @@ package com.proofpoint.json.testing;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableMap;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -144,14 +143,14 @@ public class TestJsonTester
     @Test
     public void testDecodeClass()
     {
-        SimpleDecoder simpleDecoder = decodeJson(SimpleDecoder.class, ImmutableMap.of("intValue", 3, "extra", "value"));
+        SimpleDecoder simpleDecoder = decodeJson(SimpleDecoder.class, Map.of("intValue",3,"extra","value"));
         assertEquals(simpleDecoder.intValue, 3);
     }
 
     @Test
     public void testDecodeCodec()
     {
-        List<SimpleDecoder> simpleDecoder = decodeJson(listJsonCodec(SimpleDecoder.class), List.of(ImmutableMap.of("intValue", 3, "extra", "value")));
+        List<SimpleDecoder> simpleDecoder = decodeJson(listJsonCodec(SimpleDecoder.class), List.of(Map.of("intValue", 3, "extra", "value")));
         assertEquals(simpleDecoder.size(), 1);
         assertEquals(simpleDecoder.get(0).intValue, 3);
     }
@@ -159,13 +158,13 @@ public class TestJsonTester
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Invalid JSON string for \\[simple type, class com\\.proofpoint\\.json\\.testing\\.TestJsonTester\\$SimpleDecoder\\].*")
     public void testDecodeConstructionException()
     {
-        decodeJson(SimpleDecoder.class, ImmutableMap.of());
+        decodeJson(SimpleDecoder.class, Map.of());
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Invalid JSON string for \\[collection type; class java\\.util\\.List, contains \\[simple type, class com\\.proofpoint\\.json\\.testing\\.TestJsonTester\\$SimpleDecoder\\]\\].*")
     public void testDecodeWrongType()
     {
-        decodeJson(listJsonCodec(SimpleDecoder.class), ImmutableMap.of("intValue", 3));
+        decodeJson(listJsonCodec(SimpleDecoder.class), Map.of("intValue", 3));
     }
 
     private static class SimpleEncoder

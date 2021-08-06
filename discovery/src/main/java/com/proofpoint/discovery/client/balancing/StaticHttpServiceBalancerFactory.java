@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client.balancing;
 
-import com.google.common.collect.ImmutableMap;
 import com.proofpoint.http.client.balancing.HttpServiceBalancer;
 import com.proofpoint.http.client.balancing.HttpServiceBalancerConfig;
 import com.proofpoint.http.client.balancing.HttpServiceBalancerImpl;
@@ -49,7 +48,7 @@ public class StaticHttpServiceBalancerFactory
         requireNonNull(type, "type is null");
         requireNonNull(balancerConfig, "balancerConfig is null");
 
-        Map<String, String> tags = ImmutableMap.of("serviceType", type);
+        Map<String, String> tags = Map.of("serviceType", type);
         HttpServiceBalancerStats httpServiceBalancerStats = reportCollectionFactory.createReportCollection(HttpServiceBalancerStats.class, false, "ServiceClient", tags);
         HttpServiceBalancerImpl balancer = new HttpServiceBalancerImpl(format("type=[%s]", type), httpServiceBalancerStats, balancerConfig);
         balancer.updateHttpUris(httpServiceBalancerUriConfig.getUris());

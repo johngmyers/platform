@@ -18,7 +18,6 @@ package com.proofpoint.jaxrs;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.proofpoint.jaxrs.testing.GuavaMultivaluedMap;
 import org.testng.annotations.Test;
@@ -183,7 +182,7 @@ public abstract class AbstractMapperTest<T extends MessageBodyReader<Object> & M
     public void testBeanValidationThrowsBeanValidationException() throws IOException
     {
         try {
-            InputStream is = getInputStream(ImmutableMap.of());
+            InputStream is = getInputStream(Map.of());
             mapper.readFrom(Object.class, JsonClass.class, null, null, null, is);
             fail("Should have thrown an BeanValidationException");
         }
@@ -200,7 +199,7 @@ public abstract class AbstractMapperTest<T extends MessageBodyReader<Object> & M
     {
         ArrayList<Object> jsonStructure = new ArrayList<>();
         jsonStructure.add(null);
-        jsonStructure.add(ImmutableMap.of());
+        jsonStructure.add(Map.of());
         try {
             InputStream is = getInputStream(jsonStructure);
             Type listJsonClassType = new TypeToken<List<JsonClass>>()
@@ -221,7 +220,7 @@ public abstract class AbstractMapperTest<T extends MessageBodyReader<Object> & M
     public void testBeanValidationOfSetThrowsBeanValidationException() throws IOException
     {
         try {
-            InputStream is = getInputStream(List.of(ImmutableMap.of()));
+            InputStream is = getInputStream(List.of(Map.of()));
             Type setJsonClassType = new TypeToken<Set<JsonClass>>()
             {
             }.getType();
@@ -240,7 +239,7 @@ public abstract class AbstractMapperTest<T extends MessageBodyReader<Object> & M
     public void testBeanValidationOfMapThrowsBeanValidationException() throws IOException
     {
         try {
-            InputStream is = getInputStream(ImmutableMap.of("foo", ImmutableMap.of()));
+            InputStream is = getInputStream(Map.of("foo", Map.of()));
             Type mapJsonClassType = new TypeToken<Map<String, JsonClass>>()
             {
             }.getType();
@@ -259,7 +258,7 @@ public abstract class AbstractMapperTest<T extends MessageBodyReader<Object> & M
     public void testNoPropertyMutatorInference()
             throws IOException
     {
-        InputStream is = getInputStream(ImmutableMap.of("firstField", "first", "secondField", "second", "notWritable", "foo"));
+        InputStream is = getInputStream(Map.of("firstField", "first", "secondField", "second", "notWritable", "foo"));
         JsonClass jsonClass = (JsonClass) mapper.readFrom(Object.class, JsonClass.class, null, null, null, is);
         assertNull(jsonClass.getNotWritable());
 

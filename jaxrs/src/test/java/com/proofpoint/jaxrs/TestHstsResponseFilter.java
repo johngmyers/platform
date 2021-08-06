@@ -1,6 +1,5 @@
 package com.proofpoint.jaxrs;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.net.InetAddresses;
 import com.google.inject.Binder;
 import com.google.inject.Injector;
@@ -92,7 +91,7 @@ public class TestHstsResponseFilter
     public void testHstsNotReturnedWithHttp()
             throws Exception
     {
-        createServer(ImmutableMap.of());
+        createServer(Map.of());
 
         Request request = Request.builder()
                 .setUri(uriBuilderFrom(server.getBaseUrl().resolve("/test/hsts")).build())
@@ -107,7 +106,7 @@ public class TestHstsResponseFilter
     public void testHstsWithConfig()
             throws Exception
     {
-        createServer(ImmutableMap.of("jaxrs.hsts.max-age", "600s",
+        createServer(Map.of("jaxrs.hsts.max-age", "600s",
                 "jaxrs.hsts.include-sub-domains", "true",
                 "jaxrs.hsts.preload", "true"));
         Request request = Request.builder()
@@ -124,7 +123,7 @@ public class TestHstsResponseFilter
     public void testHstsWithoutOptionalConfig()
             throws Exception
     {
-        createServer(ImmutableMap.of("jaxrs.hsts.max-age", "31536000s"));
+        createServer(Map.of("jaxrs.hsts.max-age", "31536000s"));
         Request request = Request.builder()
                 .setUri(uriBuilderFrom(server.getHttpServerInfo().getHttpsUri().resolve("/test/hsts")).build())
                 .setMethod("GET")
@@ -139,7 +138,7 @@ public class TestHstsResponseFilter
     public void testHstsDisabledIfMaxAgeNotSet()
             throws Exception
     {
-        createServer(ImmutableMap.of());
+        createServer(Map.of());
         Request request = Request.builder()
                 .setUri(uriBuilderFrom(server.getBaseUrl().resolve("/test/hsts")).build())
                 .setMethod("GET")

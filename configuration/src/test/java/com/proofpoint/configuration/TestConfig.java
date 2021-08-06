@@ -68,7 +68,7 @@ public class TestConfig
                     .build();
         Injector injector = createInjector(properties, createModule(ConfigMapSimple.class, null));
         final ConfigMapSimple mapSimple = injector.getInstance(ConfigMapSimple.class);
-        assertEquals(mapSimple.getMap(), ImmutableMap.of("key1", "value1", "key2", "value2"));
+        assertEquals(mapSimple.getMap(), Map.of("key1", "value1", "key2", "value2"));
     }
 
     @Test

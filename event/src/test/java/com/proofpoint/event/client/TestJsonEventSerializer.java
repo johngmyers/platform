@@ -19,7 +19,6 @@ import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 import com.proofpoint.node.NodeInfo;
 import com.proofpoint.tracetoken.TraceToken;
 import com.proofpoint.tracetoken.TraceTokenManager;
@@ -49,7 +48,7 @@ public class TestJsonEventSerializer
         expectedEventJson.put("host", "localhost");
         expectedEventJson.put("timestamp", "2011-09-09T01:35:28.333Z");
         expectedEventJson.put("traceToken", "sample-trace-token");
-        expectedEventJson.put("data", ImmutableMap.of(
+        expectedEventJson.put("data", Map.of(
                 "intValue", 5678,
                 "stringValue", "foo"
         ));

@@ -87,7 +87,7 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>
  *     reportBinder(binder).export(Service.class)
- *         .withTags(ImmutableMap.of("tag", "value"));</pre>
+ *         .withTags(Map.of("tag", "value"));</pre>
  *
  * Adds tags and their corresponding values to the metric being reported.
  * The previous methods may be used before this.
@@ -146,7 +146,7 @@ import static java.util.Objects.requireNonNull;
  *
  * <pre>
  *     reportBinder(binder).bindReportCollection(StatsInterface.class)
- *         .withTags(ImmutableMap.of("tag", "value"));</pre>
+ *         .withTags(Map.of("tag", "value"));</pre>
  *
  * Adds tags and their corresponding values to the metrics being reported.
  * The previous methods may be used before this.

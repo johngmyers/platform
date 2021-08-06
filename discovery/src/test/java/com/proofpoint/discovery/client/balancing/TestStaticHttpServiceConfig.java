@@ -54,7 +54,7 @@ public class TestStaticHttpServiceConfig
     public void testLegacyProperties()
     {
         assertLegacyEquivalence(StaticHttpServiceConfig.class,
-                ImmutableMap.of());
+                Map.of());
     }
 
     @Test

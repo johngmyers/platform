@@ -164,7 +164,7 @@ public class TestPropertiesBuilder
         PropertiesBuilder builder = new PropertiesBuilder()
                 .withJsonFile(file.getAbsolutePath());
 
-        assertEquals(builder.getProperties(), ImmutableMap.of());
+        assertEquals(builder.getProperties(), Map.of());
         assertEquals(builder.getExpectToUse(), ImmutableSet.of());
         assertEquals(builder.getErrors(), List.of());
     }

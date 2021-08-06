@@ -15,7 +15,6 @@
  */
 package com.proofpoint.jmx;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Injector;
 import com.proofpoint.bootstrap.LifeCycleManager;
@@ -82,7 +81,7 @@ public class TestVersionResource
     {
         Map<String, String> response = queryServer("test-application", "1.0", "2.0");
 
-        assertEquals(response, ImmutableMap.of(
+        assertEquals(response, Map.of(
                 "application", "test-application",
                 "applicationVersion", "1.0",
                 "platformVersion", "2.0"
@@ -95,7 +94,7 @@ public class TestVersionResource
     {
         Map<String, String> response = queryServer("test-application", "", "2.0");
 
-        assertEquals(response, ImmutableMap.of(
+        assertEquals(response, Map.of(
                 "application", "test-application",
                 "platformVersion", "2.0"
         ));
@@ -108,7 +107,7 @@ public class TestVersionResource
     {
         Map<String, String> response = queryServer("test-application", "1.0", "");
 
-        assertEquals(response, ImmutableMap.of(
+        assertEquals(response, Map.of(
                 "application", "test-application",
                 "applicationVersion", "1.0"
         ));

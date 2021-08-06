@@ -1,6 +1,5 @@
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
 import com.proofpoint.node.testing.TestingNodeModule;
 import com.proofpoint.reporting.testing.ReportingTester;
@@ -14,6 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import static com.proofpoint.bootstrap.Bootstrap.bootstrapTest;
 import static com.proofpoint.http.client.HttpClientBinder.httpClientBinder;
@@ -35,7 +35,7 @@ public class TestHttpClientMetrics
                 )
                 .initialize();
         Assertions.assertThat(injector.getInstance(ReportingTester.class).collectData())
-                .containsCell("HttpClient.FooClient.IoPool.FreeThreadCount", ImmutableMap.of(), 198);
+                .containsCell("HttpClient.FooClient.IoPool.FreeThreadCount", Map.of(), 198);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class TestHttpClientMetrics
                 )
                 .initialize();
         Assertions.assertThat(injector.getInstance(ReportingTester.class).collectData())
-                .containsCell("HttpClient.foo.IoPool.FreeThreadCount", ImmutableMap.of(), 198);
+                .containsCell("HttpClient.foo.IoPool.FreeThreadCount", Map.of(), 198);
     }
 
     @Retention(RUNTIME)

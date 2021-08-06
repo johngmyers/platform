@@ -284,7 +284,7 @@ public class TestConfigAssertions
     @Test
     public void testNoLegacyProperties()
     {
-        assertLegacyEquivalence(NoLegacyConfig.class, ImmutableMap.of());
+        assertLegacyEquivalence(NoLegacyConfig.class, Map.of());
     }
 
     @Test
@@ -513,8 +513,8 @@ public class TestConfigAssertions
 
         MapConfig expected = new MapConfig()
                 .setName("Jenny")
-                .setSimpleMap(ImmutableMap.of("email", "jenny@compuserve.com"))
-                .setSubMap(ImmutableMap.of("a", new SubConfig().setPhone("867-5309")));
+                .setSimpleMap(Map.of("email", "jenny@compuserve.com"))
+                .setSubMap(Map.of("a", new SubConfig().setPhone("867-5309")));
 
         assertFullMapping(properties, expected);
     }

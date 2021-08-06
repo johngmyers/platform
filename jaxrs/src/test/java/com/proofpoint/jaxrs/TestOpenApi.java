@@ -1,16 +1,15 @@
 package com.proofpoint.jaxrs;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
 import com.proofpoint.bootstrap.LifeCycleManager;
 import com.proofpoint.http.client.HttpClient;
 import com.proofpoint.http.client.StringResponseHandler.StringResponse;
 import com.proofpoint.http.client.jetty.JettyHttpClient;
 import com.proofpoint.http.server.testing.TestingAdminHttpServer;
+import com.proofpoint.jaxrs.testapi.TestingResource;
 import com.proofpoint.json.JsonCodec;
 import com.proofpoint.json.JsonModule;
 import com.proofpoint.node.testing.TestingNodeModule;
-import com.proofpoint.jaxrs.testapi.TestingResource;
 import com.proofpoint.reporting.ReportingModule;
 import com.proofpoint.testing.Closeables;
 import org.testng.annotations.AfterClass;
@@ -78,66 +77,66 @@ public class TestOpenApi
     {
         ArrayList<String> resourceList = new ArrayList<>();
         resourceList.add("TestingResource");
-        Object expected = ImmutableMap.of(
+        Object expected = Map.of(
                 "openapi", "3.0.1",
-                "paths", ImmutableMap.of(
-                        "/", ImmutableMap.of(
-                                "get", ImmutableMap.of(
+                "paths", Map.of(
+                        "/", Map.of(
+                                "get", Map.of(
                                         "tags", resourceList,
                                         "summary", "Testing GET request",
                                         "operationId", "get",
-                                        "responses", ImmutableMap.of(
-                                                "200", ImmutableMap.of("description", "SUCESSFUL"),
-                                                "400", ImmutableMap.of("description", "One or more query parameter(s) is null or empty"),
-                                                "503", ImmutableMap.of("description", "Failed to process")
+                                        "responses", Map.of(
+                                                "200", Map.of("description", "SUCESSFUL"),
+                                                "400", Map.of("description", "One or more query parameter(s) is null or empty"),
+                                                "503", Map.of("description", "Failed to process")
                                         )),
-                                "put", ImmutableMap.of(
+                                "put", Map.of(
                                         "tags", resourceList,
                                         "summary", "Testing PUT request",
                                         "operationId", "put",
-                                        "responses", ImmutableMap.of(
-                                                "200", ImmutableMap.of("description", "SUCESSFUL"),
-                                                "401", ImmutableMap.of("description", "Unauthorized"),
-                                                "503", ImmutableMap.of("description", "Failed to process")
+                                        "responses", Map.of(
+                                                "200", Map.of("description", "SUCESSFUL"),
+                                                "401", Map.of("description", "Unauthorized"),
+                                                "503", Map.of("description", "Failed to process")
                                         )),
-                                "post", ImmutableMap.of(
+                                "post", Map.of(
                                         "tags", resourceList,
                                         "summary", "Testing POST request",
                                         "operationId", "post",
-                                        "responses", ImmutableMap.of(
-                                                "200", ImmutableMap.of("description", "SUCESSFUL"),
-                                                "400", ImmutableMap.of("description", "One or more query parameter(s) is null or empty"),
-                                                "409", ImmutableMap.of("description", "State of the resource doesn't permit request."),
-                                                "503", ImmutableMap.of("description", "Failed to process"))),
-                                "delete", ImmutableMap.of(
+                                        "responses", Map.of(
+                                                "200", Map.of("description", "SUCESSFUL"),
+                                                "400", Map.of("description", "One or more query parameter(s) is null or empty"),
+                                                "409", Map.of("description", "State of the resource doesn't permit request."),
+                                                "503", Map.of("description", "Failed to process"))),
+                                "delete", Map.of(
                                         "tags", resourceList,
                                         "summary", "Testing DELETE request",
                                         "operationId", "delete",
-                                        "responses", ImmutableMap.of(
-                                                "200", ImmutableMap.of("description", "SUCESSFUL"),
-                                                "401", ImmutableMap.of("description", "Unauthorized"),
-                                                "503", ImmutableMap.of("description", "Failed to process")
+                                        "responses", Map.of(
+                                                "200", Map.of("description", "SUCESSFUL"),
+                                                "401", Map.of("description", "Unauthorized"),
+                                                "503", Map.of("description", "Failed to process")
                                         )
                                 )
                         ),
-                        "/inrotation.txt", ImmutableMap.of(
-                                "get", ImmutableMap.of(
+                        "/inrotation.txt", Map.of(
+                                "get", Map.of(
                                         "operationId", "get_1",
-                                        "responses", ImmutableMap.of(
-                                                "default", ImmutableMap.of(
+                                        "responses", Map.of(
+                                                "default", Map.of(
                                                         "description", "default response",
-                                                        "content", ImmutableMap.of("text/plain", ImmutableMap.of())
+                                                        "content", Map.of("text/plain", Map.of())
                                                 )
                                         )
                                 )
                         ),
-                        "/liveness", ImmutableMap.of(
-                                "get", ImmutableMap.of(
+                        "/liveness", Map.of(
+                                "get", Map.of(
                                         "operationId", "get_2",
-                                        "responses", ImmutableMap.of(
-                                                "default", ImmutableMap.of(
+                                        "responses", Map.of(
+                                                "default", Map.of(
                                                         "description", "default response",
-                                                        "content", ImmutableMap.of("text/plain", ImmutableMap.of())
+                                                        "content", Map.of("text/plain", Map.of())
                                                 ))
                                 )
                         )
@@ -165,18 +164,18 @@ public class TestOpenApi
     @Test
     public void testOpenApiAdminJson()
     {
-        Object expected = ImmutableMap.of(
+        Object expected = Map.of(
                 "openapi", "3.0.1",
-                "paths", ImmutableMap.of(
-                        "/admin/jstack", ImmutableMap.of(
-                                "get", ImmutableMap.of(
+                "paths", Map.of(
+                        "/admin/jstack", Map.of(
+                                "get", Map.of(
                                         "operationId", "get",
-                                        "responses", ImmutableMap.of(
-                                                "default", ImmutableMap.of(
+                                        "responses", Map.of(
+                                                "default", Map.of(
                                                         "description", "default response",
-                                                        "content", ImmutableMap.of(
-                                                                "text/plain", ImmutableMap.of(
-                                                                        "schema", ImmutableMap.of("type", "string")))))
+                                                        "content", Map.of(
+                                                                "text/plain", Map.of(
+                                                                        "schema", Map.of("type", "string")))))
                                         ))
                 )
         );

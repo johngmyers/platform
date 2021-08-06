@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -24,6 +23,7 @@ import javax.management.InstanceNotFoundException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import java.util.List;
+import java.util.Map;
 
 import static com.proofpoint.reporting.ReportedBeanRegistry.RegistrationInfo.registrationInfo;
 import static org.testng.Assert.assertEquals;
@@ -40,7 +40,7 @@ public class TestReportedBeanRegistry
     }, () -> null);
 
     private static final ObjectName TESTING_OBJECT_NAME;
-    private static final ImmutableMap<String, String> TESTING_TAGS = ImmutableMap.of("tag", "value");
+    private static final Map<String, String> TESTING_TAGS = Map.of("tag", "value");
 
     static {
         ObjectName objectName = null;
@@ -91,7 +91,7 @@ public class TestReportedBeanRegistry
             throws Exception
     {
         registry.register(TESTING_REPORTED_BEAN, TESTING_OBJECT_NAME);
-        assertEquals(registry.getReportedBeans(), List.of(registrationInfo(TESTING_REPORTED_BEAN, false, "TestingObject", ImmutableMap.of())));
+        assertEquals(registry.getReportedBeans(), List.of(registrationInfo(TESTING_REPORTED_BEAN, false, "TestingObject", Map.of())));
     }
 
     @Test

@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.ConfigurationException;
 import com.google.inject.CreationException;
 import com.google.inject.Injector;
@@ -27,6 +26,8 @@ import com.proofpoint.reporting.ReportingModule;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.Map;
 
 import static com.proofpoint.bootstrap.Bootstrap.bootstrapTest;
 import static com.proofpoint.discovery.client.DiscoveryBinder.discoveryBinder;
@@ -86,7 +87,7 @@ public class TestStaticDiscoveryModule
                         binder -> discoveryBinder(binder).bindHttpBalancer("foo"),
                         binder -> discoveryBinder(binder).bindHttpBalancer("bar")
                 )
-                .setRequiredConfigurationProperties(ImmutableMap.of(
+                .setRequiredConfigurationProperties(Map.of(
                         "service-balancer.foo.uri", "fake://server",
                         "service-balancer.bar.uri", "fake://server")
                 )

@@ -66,7 +66,7 @@ public class TestReportCollectionFactory
 
         verify(reportExporter).export(reportCaptor.capture(), eq(false), stringCaptor.capture(), tagCaptor.capture());
         assertEquals(stringCaptor.getValue(), "KeyedDistribution.Add");
-        assertEquals(tagCaptor.getValue(), ImmutableMap.of("foo", "value", "bar", "false"));
+        assertEquals(tagCaptor.getValue(), Map.of("foo", "value", "bar", "false"));
         assertSame(reportCaptor.getValue(), someObject);
     }
 
@@ -81,7 +81,7 @@ public class TestReportCollectionFactory
 
         verify(reportExporter).export(reportCaptor.capture(), eq(false), stringCaptor.capture(), tagCaptor.capture());
         assertEquals(stringCaptor.getValue(), "KeyedDistribution.Add");
-        assertEquals(tagCaptor.getValue(), ImmutableMap.of("bar", "false"));
+        assertEquals(tagCaptor.getValue(), Map.of("bar", "false"));
         assertSame(reportCaptor.getValue(), someObject);
     }
 
@@ -96,7 +96,7 @@ public class TestReportCollectionFactory
 
         verify(reportExporter).export(reportCaptor.capture(), eq(false), stringCaptor.capture(), tagCaptor.capture());
         assertEquals(stringCaptor.getValue(), "OptionalKeyedDistribution.Add");
-        assertEquals(tagCaptor.getValue(), ImmutableMap.of("bar", "false"));
+        assertEquals(tagCaptor.getValue(), Map.of("bar", "false"));
         assertSame(reportCaptor.getValue(), someObject);
     }
 
@@ -117,7 +117,7 @@ public class TestReportCollectionFactory
                 KeyedDistribution.class,
                 true,
                 "Prefix",
-                ImmutableMap.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
+                Map.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
         );
         SomeObject someObject = keyedDistribution.add("value", false);
 
@@ -144,7 +144,7 @@ public class TestReportCollectionFactory
                 KeyedDistribution.class,
                 false,
                 null,
-                ImmutableMap.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
+                Map.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
         );
         SomeObject someObject = keyedDistribution.add("value", false);
 
@@ -172,7 +172,7 @@ public class TestReportCollectionFactory
                 KeyedDistribution.class,
                 true,
                 "Prefix",
-                ImmutableMap.of("foo", "fooval")
+                Map.of("foo", "fooval")
         );
     }
 
@@ -242,7 +242,7 @@ public class TestReportCollectionFactory
 
         verify(reportExporter).export(reportCaptor.capture(), eq(false), stringCaptor.capture(), tagCaptor.capture());
         assertEquals(stringCaptor.getValue(), "NoParameters.Add");
-        assertEquals(tagCaptor.getValue(), ImmutableMap.of());
+        assertEquals(tagCaptor.getValue(), Map.of());
         assertNotNull(reportCaptor.getValue());
 
         assertNotNull(noParameters.add());
@@ -256,7 +256,7 @@ public class TestReportCollectionFactory
                 NoParameters.class,
                 true,
                 "Prefix",
-                ImmutableMap.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
+                Map.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
         );
 
         TrackInstantiation.assertInstantiated();
@@ -285,7 +285,7 @@ public class TestReportCollectionFactory
                 NoParameters.class,
                 false,
                 null,
-                ImmutableMap.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
+                Map.of("a", "fooval", "b", "with\"quote", "c", "with,comma", "d", "with\\backslash")
         );
 
         TrackInstantiation.assertInstantiated();

@@ -79,7 +79,7 @@ public final class ConfigurationFactory
 
     public ConfigurationFactory(Map<String, String> properties)
     {
-        this(properties, ImmutableMap.of(), ImmutableMap.of(), ImmutableMap.of(), properties.keySet(), List.of(), Problems.NULL_MONITOR);
+        this(properties, Map.of(), Map.of(), Map.of(), properties.keySet(), List.of(), Problems.NULL_MONITOR);
     }
 
     ConfigurationFactory(Map<String, String> properties, Map<String, String> applicationDefaults, Map<String, String> moduleDefaults, Map<String, ConfigurationDefaultingModule> moduleDefaultSource, Set<String> expectToUse, Collection<String> errors, final Monitor monitor)

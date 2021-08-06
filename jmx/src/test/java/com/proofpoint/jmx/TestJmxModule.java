@@ -15,7 +15,6 @@
  */
 package com.proofpoint.jmx;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -33,7 +32,7 @@ public class TestJmxModule
     @Test(enabled = false) // GitHub Actions appears to have created a host firewall that makes this fail
     public void testCanConstruct()
     {
-        Map<String, String> properties = ImmutableMap.of();
+        Map<String, String> properties = Map.of();
         ConfigurationFactory configFactory = new ConfigurationFactory(properties);
         Injector injector = Guice.createInjector(Stage.PRODUCTION,
                 new JmxModule(),

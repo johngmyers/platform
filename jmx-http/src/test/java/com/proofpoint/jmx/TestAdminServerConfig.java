@@ -53,6 +53,6 @@ public class TestAdminServerConfig
     @Test
     public void testLegacyProperties()
     {
-        assertLegacyEquivalence(AdminServerConfig.class, ImmutableMap.of());
+        assertLegacyEquivalence(AdminServerConfig.class, Map.of());
     }
 }

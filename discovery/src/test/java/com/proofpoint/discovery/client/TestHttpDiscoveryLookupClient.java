@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -59,11 +60,11 @@ public class TestHttpDiscoveryLookupClient
     public static final UUID UUID_ID_2 = UUID.randomUUID();
     public static final UUID UUID_NODEID_1 = UUID.randomUUID();
     public static final UUID UUID_NODEID_2 = UUID.randomUUID();
-    public static final ImmutableMap<String, String> TEST_PROPERTIES_1 = ImmutableMap.of(
+    public static final ImmutableMap<String, String> TEST_PROPERTIES_1 = Map.of(
             "property1", "value1",
             "property2", "value2"
     );
-    public static final ImmutableMap<String, String> TEST_PROPERTIES_2 = ImmutableMap.of(
+    public static final ImmutableMap<String, String> TEST_PROPERTIES_2 = Map.of(
             "property3", "value3",
             "property4", "value4"
     );
@@ -269,7 +270,7 @@ public class TestHttpDiscoveryLookupClient
             );
 
             TestingResponse.Builder response = mockResponse()
-                    .jsonBody(ImmutableMap.of(
+                    .jsonBody(Map.of(
                             "environment", environment,
                             "services", List.of(
                                     ImmutableMap.builder()

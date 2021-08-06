@@ -16,11 +16,11 @@
 package com.proofpoint.http.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.ImmutableMap;
 import com.proofpoint.json.JsonCodec;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.proofpoint.json.JsonCodec.jsonCodec;
 import static com.proofpoint.json.JsonCodec.listJsonCodec;
@@ -39,7 +39,7 @@ public abstract class AbstractCodecBodyGeneratorTest
     {
         StaticBodyGenerator bodyGenerator = createBodyGenerator(jsonCodec(JsonClass.class),
                 new JsonClass("first", "second"));
-        ImmutableMap<String, String> expected = ImmutableMap.of(
+        Map<String, String> expected = Map.of(
                 "firstField", "first",
                 "secondField", "second"
         );
@@ -52,12 +52,12 @@ public abstract class AbstractCodecBodyGeneratorTest
     {
         StaticBodyGenerator bodyGenerator = createBodyGenerator(listJsonCodec(JsonClass.class),
                 List.of(new JsonClass("first", "second"), new JsonClass("third", "fourth")));
-        List<ImmutableMap<String, String>> expected = List.of(
-                ImmutableMap.of(
+        List<Map<String, String>> expected = List.of(
+                Map.of(
                         "firstField", "first",
                         "secondField", "second"
                 ),
-                ImmutableMap.of(
+                Map.of(
                         "firstField", "third",
                         "secondField", "fourth"
                 ));

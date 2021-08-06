@@ -18,7 +18,6 @@ package com.proofpoint.bootstrap;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Binder;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
@@ -47,10 +46,6 @@ import com.proofpoint.node.NodeInfo;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.PrintWriter;
-import java.nio.file.DirectoryStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -595,7 +590,7 @@ public class Bootstrap
         {
             bootstrap = new Bootstrap(new ApplicationNameModule("test-application"), modules, false)
                     .quiet()
-                    .setRequiredConfigurationProperties(ImmutableMap.of()); // Suppress reading configuration file
+                    .setRequiredConfigurationProperties(Map.of()); // Suppress reading configuration file
         }
 
         /**

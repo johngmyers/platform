@@ -47,7 +47,7 @@ public class TestHttpServiceBalancerConfig
     public void testLegacyProperties()
     {
         ConfigAssertions.assertLegacyEquivalence(HttpServiceBalancerConfig.class,
-                ImmutableMap.of());
+                Map.of());
     }
 
     @Test

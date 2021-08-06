@@ -17,7 +17,6 @@ package com.proofpoint.discovery.client;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
 import com.proofpoint.discovery.client.balancing.HttpServiceBalancerListenerAdapter;
 import com.proofpoint.http.client.ServiceType;
@@ -37,6 +36,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
@@ -209,7 +209,7 @@ public class ServiceInventory
                                         "general",
                                         null,
                                         ServiceState.RUNNING,
-                                        ImmutableMap.of("http", new URI("http", null, inetAddress.getHostAddress(), 4111, null, null, null).toASCIIString()));
+                                        Map.of("http", new URI("http", null, inetAddress.getHostAddress(), 4111, null, null, null).toASCIIString()));
                             }
                             catch (URISyntaxException e) {
                                 log.error(e, "Invalid discovery server address %s", inetAddress);

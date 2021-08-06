@@ -15,12 +15,12 @@
  */
 package com.proofpoint.reporting.testing;
 
-import com.google.common.collect.ImmutableMap;
 import com.proofpoint.reporting.Key;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 import static com.proofpoint.testing.EquivalenceTester.equivalenceTester;
 import static org.mockito.Mockito.verify;
@@ -55,7 +55,7 @@ public class TestTestingReportCollectionFactory
     @Test
     public void testGetPrefixedArgumentVerifier()
     {
-        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, true, null, ImmutableMap.of());
+        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, true, null, Map.of());
         assertNotNull(reportCollection);
         assertNotNull(factory.getArgumentVerifier(reportCollection));
     }
@@ -91,7 +91,7 @@ public class TestTestingReportCollectionFactory
     @Test
     public void testPrefixedArgumentVerifier()
     {
-        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, true, null, ImmutableMap.of());
+        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, true, null, Map.of());
         reportCollection.add("foo", true);
         KeyedDistribution keyedDistribution = factory.getArgumentVerifier(reportCollection);
         verify(keyedDistribution).add("foo", true);
@@ -121,7 +121,7 @@ public class TestTestingReportCollectionFactory
     @Test
     public void testGetPrefixedReportCollection()
     {
-        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, false, "Prefix", ImmutableMap.of());
+        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, false, "Prefix", Map.of());
         assertNotNull(reportCollection);
         assertNotNull(factory.getReportCollection(reportCollection));
     }
@@ -166,7 +166,7 @@ public class TestTestingReportCollectionFactory
     @Test
     public void testPrefixedReturnValueSpy()
     {
-        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, false, "Prefix", ImmutableMap.of());
+        KeyedDistribution reportCollection = factory.createReportCollection(KeyedDistribution.class, false, "Prefix", Map.of());
         reportCollection.add("foo", true).put("bar");
         reportCollection.add("foo", false).put("other");
 
@@ -211,8 +211,8 @@ public class TestTestingReportCollectionFactory
     @Test
     public void testDuplicatePrefixedClass()
     {
-        factory.createReportCollection(KeyedDistribution.class, true, "Prefix", ImmutableMap.of());
-        factory.createReportCollection(KeyedDistribution.class, true, "Prefix", ImmutableMap.of());
+        factory.createReportCollection(KeyedDistribution.class, true, "Prefix", Map.of());
+        factory.createReportCollection(KeyedDistribution.class, true, "Prefix", Map.of());
     }
 
     @Test(expectedExceptions = Error.class, expectedExceptionsMessageRegExp = "Duplicate ReportCollection for interface .*")
@@ -226,8 +226,8 @@ public class TestTestingReportCollectionFactory
     public void testEquivalence()
     {
         equivalenceTester()
-                .addEquivalentGroup(factory.createReportCollection(KeyedDistribution.class, true, "Prefix", ImmutableMap.of()))
-                .addEquivalentGroup(factory.createReportCollection(KeyedDistribution.class, true, "Prefix", ImmutableMap.of()))
+                .addEquivalentGroup(factory.createReportCollection(KeyedDistribution.class, true, "Prefix", Map.of()))
+                .addEquivalentGroup(factory.createReportCollection(KeyedDistribution.class, true, "Prefix", Map.of()))
                 .check();
     }
 

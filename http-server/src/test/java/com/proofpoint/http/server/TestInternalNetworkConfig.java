@@ -49,6 +49,6 @@ public class TestInternalNetworkConfig
     public void testLegacyProperties()
     {
         assertLegacyEquivalence(InternalNetworkConfig.class,
-                ImmutableMap.of());
+                Map.of());
     }
 }

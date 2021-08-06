@@ -49,9 +49,9 @@ public class HttpServerProvider
     private final HttpServerConfig config;
     private final Servlet theServlet;
     private final Set<HttpResourceBinding> resources;
-    private Map<String, String> servletInitParameters = ImmutableMap.of();
+    private Map<String, String> servletInitParameters = Map.of();
     private final Servlet theAdminServlet;
-    private Map<String, String> adminServletInitParameters = ImmutableMap.of();
+    private Map<String, String> adminServletInitParameters = Map.of();
     private MBeanServer mbeanServer;
     private LoginService loginService;
     private final RequestStats stats;

@@ -15,7 +15,6 @@
  */
 package com.proofpoint.configuration;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 import com.google.inject.Binder;
 import com.google.inject.CreationException;
@@ -137,7 +136,7 @@ public class TestConfigurationFactoryBuilder
                 .build()
                 .getProperties();
 
-        assertEquals(properties, ImmutableMap.of("string", "foo"));
+        assertEquals(properties, Map.of("string","foo"));
     }
 
     @Test
@@ -198,7 +197,7 @@ public class TestConfigurationFactoryBuilder
         TestMonitor monitor = new TestMonitor();
         final ConfigurationFactory configurationFactory = new ConfigurationFactoryBuilder()
                 .withMonitor(monitor)
-                .withModuleDefaults(ImmutableMap.of("unused", "foo"), ImmutableMap.of("unused", TEST_DEFAULTING_MODULE))
+                .withModuleDefaults(Map.of("unused","foo"), Map.of("unused", TEST_DEFAULTING_MODULE))
                 .withFile(file.getAbsolutePath())
                 .withSystemProperties()
                 .build();
@@ -224,7 +223,7 @@ public class TestConfigurationFactoryBuilder
         TestMonitor monitor = new TestMonitor();
         final ConfigurationFactory configurationFactory = new ConfigurationFactoryBuilder()
                 .withMonitor(monitor)
-                .withApplicationDefaults(ImmutableMap.of("unused", "foo"))
+                .withApplicationDefaults(Map.of("unused", "foo"))
                 .withFile(file.getAbsolutePath())
                 .withSystemProperties()
                 .build();

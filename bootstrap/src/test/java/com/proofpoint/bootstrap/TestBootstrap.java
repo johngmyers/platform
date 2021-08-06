@@ -15,7 +15,6 @@
  */
 package com.proofpoint.bootstrap;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import com.google.inject.Binder;
 import com.google.inject.ConfigurationException;
@@ -195,7 +194,7 @@ public class TestBootstrap
     {
         Injector injector = bootstrapTest()
                 .withModules((Module) binder -> bindConfig(binder).bind(SimpleConfig.class))
-                .setRequiredConfigurationProperties(ImmutableMap.of("property", "required value"))
+                .setRequiredConfigurationProperties(Map.of("property", "required value"))
                 .initialize();
 
         SimpleConfig simpleConfig = injector.getInstance(SimpleConfig.class);
@@ -258,7 +257,7 @@ public class TestBootstrap
         Injector injector = bootstrapApplication("test-application")
                 .doNotInitializeLogging()
                 .withModules((Module) binder -> bindConfig(binder).bind(SimpleConfig.class))
-                .withApplicationDefaults(ImmutableMap.of(
+                .withApplicationDefaults(Map.of(
                         "property", "default value",
                         "other-property", "other default value"
                 ))
@@ -281,7 +280,7 @@ public class TestBootstrap
                     @Override
                     public Map<String, String> getConfigurationDefaults()
                     {
-                        return ImmutableMap.of(
+                        return Map.of(
                                 "property", "default value",
                                 "other-property", "other default value"
                         );
@@ -309,7 +308,7 @@ public class TestBootstrap
                     @Override
                     public Map<String, String> getConfigurationDefaults()
                     {
-                        return ImmutableMap.of("property", "default value");
+                        return Map.of("property","default value");
                     }
 
                     @Override
@@ -327,7 +326,7 @@ public class TestBootstrap
                     @Override
                     public Map<String, String> getConfigurationDefaults()
                     {
-                        return ImmutableMap.of("property", "default value");
+                        return Map.of("property","default value");
                     }
 
                     @Override
@@ -362,7 +361,7 @@ public class TestBootstrap
                     @Override
                     public Map<String, String> getConfigurationDefaults()
                     {
-                        return ImmutableMap.of("property", "bound default value");
+                        return Map.of("property","bound default value");
                     }
 
                     @Override
@@ -370,7 +369,7 @@ public class TestBootstrap
                     {
                     }
                 })
-                .withApplicationDefaults(ImmutableMap.of(
+                .withApplicationDefaults(Map.of(
                         "property", "application default value"
                 ))
                 .initialize();
@@ -597,7 +596,7 @@ public class TestBootstrap
                 .doNotInitializeLogging()
                 .withModules(new NodeModule())
                 .quiet()
-                .setRequiredConfigurationProperties(ImmutableMap.of(
+                .setRequiredConfigurationProperties(Map.of(
                         "node.environment", "test"
                 ))
                 .initialize()
@@ -617,7 +616,7 @@ public class TestBootstrap
                 .withModules(new NodeModule(),
                         binder -> bindConfig(binder).bind(SimpleConfig.class))
                 .quiet()
-                .setRequiredConfigurationProperties(ImmutableMap.of(
+                .setRequiredConfigurationProperties(Map.of(
                         "node.environment", "test",
                         "property", "test-dynamic-application"
                 ))

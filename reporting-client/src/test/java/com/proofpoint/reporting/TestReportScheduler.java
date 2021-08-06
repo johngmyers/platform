@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import com.google.inject.Guice;
@@ -49,7 +48,7 @@ import static org.testng.Assert.assertEquals;
 
 public class TestReportScheduler
 {
-    private static final ImmutableMap<String, String> EXPECTED_VERSION_TAGS = ImmutableMap.of("applicationVersion", "1.2", "platformVersion", "platform.1");
+    private static final Map<String, String> EXPECTED_VERSION_TAGS = Map.of("applicationVersion", "1.2", "platformVersion", "platform.1");
 
     @Mock
     private ReportCollector reportCollector;
@@ -77,7 +76,7 @@ public class TestReportScheduler
                 new ApplicationNameModule("test-application"),
                 new TestingNodeModule(),
                 new TestingDiscoveryModule(),
-                new ConfigurationModule(new ConfigurationFactory(ImmutableMap.of())),
+                new ConfigurationModule(new ConfigurationFactory(Map.of())),
                 new JsonModule(),
                 new ReportingModule(),
                 new ReportingClientModule());

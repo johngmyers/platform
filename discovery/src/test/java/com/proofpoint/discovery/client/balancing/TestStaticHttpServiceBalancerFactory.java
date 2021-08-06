@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client.balancing;
 
-import com.google.common.collect.ImmutableMap;
 import com.proofpoint.http.client.balancing.HttpServiceAttempt;
 import com.proofpoint.http.client.balancing.HttpServiceBalancer;
 import com.proofpoint.http.client.balancing.HttpServiceBalancerConfig;
@@ -28,6 +27,7 @@ import org.mockito.ArgumentCaptor;
 import org.testng.annotations.Test;
 
 import java.net.URI;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -53,10 +53,10 @@ public class TestStaticHttpServiceBalancerFactory
         assertEquals(attempt.getUri(), URI.create("http://invalid.invalid"));
 
         attempt.markGood();
-        verify(reportExporter).export(balancer, false, "ServiceClient", ImmutableMap.of("serviceType", "foo"));
+        verify(reportExporter).export(balancer, false, "ServiceClient", Map.of("serviceType", "foo"));
         ArgumentCaptor<SparseTimeStat> statsCaptor = ArgumentCaptor.forClass(SparseTimeStat.class);
         verify(reportExporter).export(statsCaptor.capture(), eq(false), eq("ServiceClient.RequestTime"),
-                eq(ImmutableMap.of("serviceType", "foo", "targetUri", "http://invalid.invalid", "status", "success")));
+                eq(Map.of("serviceType", "foo", "targetUri", "http://invalid.invalid", "status", "success")));
         verifyNoMoreInteractions(reportExporter);
     }
 }

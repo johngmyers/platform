@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client.balancing;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
 import com.proofpoint.discovery.client.ServiceDescriptor;
@@ -32,9 +31,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -50,12 +48,12 @@ import static org.testng.Assert.assertEquals;
 
 public class TestHttpServiceBalancerListenerAdapter
 {
-    private static final ServiceDescriptor APPLE_1_SERVICE = new ServiceDescriptor(UUID.randomUUID(), "node-A", "apple", "pool", "location", ServiceState.RUNNING, ImmutableMap.of("http", "http://apple-a.example.com"));
-    private static final ServiceDescriptor APPLE_1_SERVICE_REPLACEMENT = new ServiceDescriptor(APPLE_1_SERVICE.getId(), "node-A", "apple", "pool", "location", ServiceState.RUNNING, ImmutableMap.of("http", "http://apple-b.example.com"));
-    private static final ServiceDescriptor APPLE_2_SERVICE = new ServiceDescriptor(UUID.randomUUID(), "node-B", "apple", "pool", "location", ServiceState.RUNNING, ImmutableMap.of("http", "http://apple-c.example.com", "https", "https://apple-b.example.com"));
-    private static final ServiceDescriptor APPLE_2_SERVICE_WEIGHTED = new ServiceDescriptor(UUID.randomUUID(), "node-B", "apple", "pool", "location", ServiceState.RUNNING, ImmutableMap.of("http", "http://apple-c.example.com", "https", "https://apple-b.example.com", "weight", "2.5"));
-    private static final ServiceDescriptor DIFFERENT_TYPE = new ServiceDescriptor(UUID.randomUUID(), "node-A", "banana", "pool", "location", ServiceState.RUNNING, ImmutableMap.of("https", "https://banana.example.com"));
-    private static final ServiceDescriptor DIFFERENT_POOL = new ServiceDescriptor(UUID.randomUUID(), "node-B", "apple", "fool", "location", ServiceState.RUNNING, ImmutableMap.of("http", "http://apple-fool.example.com"));
+    private static final ServiceDescriptor APPLE_1_SERVICE = new ServiceDescriptor(UUID.randomUUID(), "node-A", "apple", "pool", "location", ServiceState.RUNNING, Map.of("http", "http://apple-a.example.com"));
+    private static final ServiceDescriptor APPLE_1_SERVICE_REPLACEMENT = new ServiceDescriptor(APPLE_1_SERVICE.getId(), "node-A", "apple", "pool", "location", ServiceState.RUNNING, Map.of("http", "http://apple-b.example.com"));
+    private static final ServiceDescriptor APPLE_2_SERVICE = new ServiceDescriptor(UUID.randomUUID(), "node-B", "apple", "pool", "location", ServiceState.RUNNING, Map.of("http", "http://apple-c.example.com", "https", "https://apple-b.example.com"));
+    private static final ServiceDescriptor APPLE_2_SERVICE_WEIGHTED = new ServiceDescriptor(UUID.randomUUID(), "node-B", "apple", "pool", "location", ServiceState.RUNNING, Map.of("http", "http://apple-c.example.com", "https", "https://apple-b.example.com", "weight", "2.5"));
+    private static final ServiceDescriptor DIFFERENT_TYPE = new ServiceDescriptor(UUID.randomUUID(), "node-A", "banana", "pool", "location", ServiceState.RUNNING, Map.of("https", "https://banana.example.com"));
+    private static final ServiceDescriptor DIFFERENT_POOL = new ServiceDescriptor(UUID.randomUUID(), "node-B", "apple", "fool", "location", ServiceState.RUNNING, Map.of("http", "http://apple-fool.example.com"));
 
     private ScheduledExecutorService executor;
     private NodeInfo nodeInfo;

@@ -15,9 +15,6 @@
  */
 package com.proofpoint.http.client;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.Multiset;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.proofpoint.http.client.balancing.HttpServiceBalancer;
@@ -30,8 +27,6 @@ import com.proofpoint.reporting.ReportExporter;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.net.URI;
-import java.util.Collection;
 import java.util.Map;
 
 import static java.lang.String.format;
@@ -79,7 +74,7 @@ class ConfiguredStaticHttpServiceBalancerProvider implements Provider<HttpServic
     {
         requireNonNull(type, "type is null");
 
-        Map<String, String> tags = ImmutableMap.of("serviceType", type);
+        Map<String, String> tags = Map.of("serviceType", type);
         HttpServiceBalancerStats httpServiceBalancerStats = reportCollectionFactory.createReportCollection(HttpServiceBalancerStats.class, false, "ServiceClient", tags);
         HttpServiceBalancerImpl balancer = new HttpServiceBalancerImpl(format("type=[%s], static", type), httpServiceBalancerStats, injector.getInstance(balancerConfigKey));
         reportExporter.export(balancer, false, "ServiceClient", tags);

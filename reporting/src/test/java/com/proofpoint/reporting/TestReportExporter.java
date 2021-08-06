@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.proofpoint.reporting.ReportException.Reason;
 import com.proofpoint.reporting.ReportedBeanRegistry.RegistrationInfo;
@@ -82,21 +81,21 @@ public class TestReportExporter
     @Test
     public void testExport()
     {
-        reportExporter.export(TESTING_OBJECT, false, "TestingObject", ImmutableMap.of());
-        assertExported(false, ImmutableMap.of());
+        reportExporter.export(TESTING_OBJECT, false, "TestingObject", Map.of());
+        assertExported(false, Map.of());
     }
 
     @Test
     public void testExportPrefix()
     {
-        reportExporter.export(TESTING_OBJECT, true, "TestingObject", ImmutableMap.of("foo", "bar"));
-        assertExported(true, ImmutableMap.of("foo", "bar"));
+        reportExporter.export(TESTING_OBJECT, true, "TestingObject", Map.of("foo", "bar"));
+        assertExported(true, Map.of("foo","bar"));
     }
 
     @Test
     public void testExportNoAttributes()
     {
-        reportExporter.export(new Object(), false, "TestingObject", ImmutableMap.of());
+        reportExporter.export(new Object(), false, "TestingObject", Map.of());
         assertEquals(registry.getReportedBeans(), List.of());
     }
 
@@ -104,8 +103,8 @@ public class TestReportExporter
     public void testExportDuplicate()
     {
         try {
-            reportExporter.export(TESTING_OBJECT, false, "TestingObject", ImmutableMap.of());
-            reportExporter.export(TESTING_OBJECT, false, "TestingObject", ImmutableMap.of());
+            reportExporter.export(TESTING_OBJECT, false, "TestingObject", Map.of());
+            reportExporter.export(TESTING_OBJECT, false, "TestingObject", Map.of());
             fail("expected ReportException");
         }
         catch (ReportException e) {
@@ -117,7 +116,7 @@ public class TestReportExporter
     @Test
     public void testUnexportObject()
     {
-        reportExporter.export(TESTING_OBJECT, false, "TestingObject", ImmutableMap.of());
+        reportExporter.export(TESTING_OBJECT, false, "TestingObject", Map.of());
         reportExporter.unexportObject(TESTING_OBJECT);
         assertEquals(registry.getReportedBeans(), List.of());
     }
@@ -139,7 +138,7 @@ public class TestReportExporter
     public void testNotifyBucketIdProvider()
     {
         TestingBucketed bucketed = spy(new TestingBucketed());
-        reportExporter.export(bucketed, false, "TestingBucketed", ImmutableMap.of());
+        reportExporter.export(bucketed, false, "TestingBucketed", Map.of());
 
         verify(bucketed).setBucketIdProvider(bucketIdProvider);
         verify(bucketed.getInnerBucketed()).setBucketIdProvider(bucketIdProvider);
@@ -149,7 +148,7 @@ public class TestReportExporter
     public void testLegacyExportString()
     {
         reportExporter.export(TESTING_OBJECT_NAME.getCanonicalName(), TESTING_OBJECT);
-        assertExported(false, ImmutableMap.of());
+        assertExported(false, Map.of());
     }
 
     @Test
@@ -190,7 +189,7 @@ public class TestReportExporter
     public void testLegacyExportObjectName()
     {
         reportExporter.export(TESTING_OBJECT_NAME, TESTING_OBJECT);
-        assertExported(false, ImmutableMap.of());
+        assertExported(false, Map.of());
     }
 
     @Test

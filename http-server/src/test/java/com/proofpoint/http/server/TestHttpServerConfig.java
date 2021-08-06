@@ -169,6 +169,6 @@ public class TestHttpServerConfig
     @Test
     public void testLegacyProperties()
     {
-        assertLegacyEquivalence(HttpServerConfig.class, ImmutableMap.of());
+        assertLegacyEquivalence(HttpServerConfig.class, Map.of());
     }
 }

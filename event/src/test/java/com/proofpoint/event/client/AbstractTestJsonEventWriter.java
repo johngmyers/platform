@@ -81,7 +81,7 @@ public abstract class AbstractTestJsonEventWriter
                 .put("host", "localhost")
                 .put("timestamp", "2011-09-09T01:59:59.999Z")
                 .put("traceToken", "sample-trace-token")
-                .put("data", ImmutableMap.of("intValue", 123))
+                .put("data", Map.of("intValue", 123))
                 .build()
         );
 
@@ -147,11 +147,11 @@ public abstract class AbstractTestJsonEventWriter
                 .put("uuid", "8e248a16-da86-11e0-9e77-9fc96e21a396")
                 .put("host", "localhost")
                 .put("timestamp", "2011-09-09T01:35:28.333Z")
-                .put("traceToken", ImmutableMap.of(
-                                                    "id", "other-trace-token",
-                                                    "key", "value"
-                                            ))
-                .put("data", ImmutableMap.of("intValue", 5678, "stringValue", "foo"))
+                .put("traceToken", Map.of(
+                        "id", "other-trace-token",
+                        "key", "value"
+                ))
+                .put("data", Map.of("intValue", 5678,  "stringValue", "foo"))
                 .build()
         ));
 
@@ -180,7 +180,7 @@ public abstract class AbstractTestJsonEventWriter
                 .put("host", "localhost")
                 .put("timestamp", "2011-09-09T01:35:28.333Z")
                 .put("traceToken", "other-trace-token")
-                .put("data", ImmutableMap.of("intValue", 5678, "stringValue", "foo"))
+                .put("data", Map.of("intValue",  5678, "stringValue", "foo"))
                 .build()
         ));
 
@@ -199,27 +199,27 @@ public abstract class AbstractTestJsonEventWriter
                 .put("traceToken", "sample-trace-token")
                 .put("data", ImmutableMap.<String, Object>builder()
                         .put("intValue", 9999)
-                        .put("namedParts", ImmutableMap.<String, Object>of(
-                                "listFirst", ImmutableMap.of(
+                        .put("namedParts", Map.of(
+                                "listFirst", Map.of(
                                         "name", "listFirst",
-                                        "part", ImmutableMap.of("name", "listSecond")),
-                                "listThird", ImmutableMap.of("name", "listThird")))
-                        .put("namedStringList", ImmutableMap.of(
+                                        "part", Map.of("name", "listSecond")),
+                                "listThird", Map.of("name", "listThird")))
+                        .put("namedStringList", Map.of(
                                 "abc", List.of("abc", "abc", "abc"),
                                 "xyz", List.of("xyz", "xyz", "xyz")))
-                        .put("namedStrings", ImmutableMap.of(
+                        .put("namedStrings", Map.of(
                                 "abc", "abc",
                                 "xyz", "xyz"))
-                        .put("nestedPart", ImmutableMap.of(
-                                "name", "first",
-                                "part", ImmutableMap.of(
+                        .put("nestedPart", Map.of(
+                                "name",  "first",
+                                "part", Map.of(
                                         "name", "second",
-                                        "part", ImmutableMap.of("name", "third"))))
+                                        "part", Map.of("name", "third"))))
                         .put("nestedParts", List.of(
-                                ImmutableMap.of(
-                                         "name", "listFirst",
-                                         "part", ImmutableMap.of("name", "listSecond")),
-                                ImmutableMap.of("name", "listThird")))
+                                Map.of(
+                                        "name", "listFirst",
+                                        "part", Map.of("name", "listSecond")),
+                                Map.of("name", "listThird")))
                         .put("stringValue", "nested")
                         .put("strings", List.of("abc", "xyz"))
                         .build())

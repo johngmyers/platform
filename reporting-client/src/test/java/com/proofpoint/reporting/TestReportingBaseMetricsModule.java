@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
 import com.proofpoint.bootstrap.LifeCycleManager;
 import com.proofpoint.log.Logger;
@@ -25,6 +24,8 @@ import com.proofpoint.reporting.testing.TestingReportingModule;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.Map;
 
 import static com.proofpoint.bootstrap.Bootstrap.bootstrapTest;
 import static org.assertj.guava.api.Assertions.assertThat;
@@ -67,6 +68,6 @@ public class TestReportingBaseMetricsModule
         log.warn("testing warn log line");
 
         assertThat(injector.getInstance(ReportingTester.class).collectData())
-                .containsCell("ReportCollector.LogErrors.Count", ImmutableMap.of(), 1.0);
+                .containsCell("ReportCollector.LogErrors.Count", Map.of(), 1.0);
     }
 }

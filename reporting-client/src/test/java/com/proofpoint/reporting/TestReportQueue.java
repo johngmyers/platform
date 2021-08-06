@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableTable;
 import com.proofpoint.testing.SerialScheduledExecutorService;
 import org.testng.annotations.BeforeMethod;
@@ -32,7 +31,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class TestReportQueue
 {
-    private static final ImmutableTable<String, Map<String, String>, Object> TESTING_METRIC_DATA = ImmutableTable.of("row", ImmutableMap.of("tag", "tagValue"), 3.14);
+    private static final ImmutableTable<String, Map<String, String>, Object> TESTING_METRIC_DATA = ImmutableTable.of("row", Map.of("tag", "tagValue"), 3.14);
 
     private ExecutorService clientExecutorService;
     private ReportClient reportClient;

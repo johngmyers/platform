@@ -41,7 +41,7 @@ public class TestJmxConfig
     @Test
     public void testLegacyEquivalence()
     {
-        assertLegacyEquivalence(JmxConfig.class, ImmutableMap.of());
+        assertLegacyEquivalence(JmxConfig.class, Map.of());
     }
 
 }

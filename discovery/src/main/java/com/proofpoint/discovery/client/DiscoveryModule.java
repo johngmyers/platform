@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Binder;
 import com.google.inject.Key;
 import com.google.inject.Module;
@@ -50,8 +49,8 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.inject.multibindings.Multibinder.newSetBinder;
 import static com.proofpoint.concurrent.Threads.daemonThreadsNamed;
 import static com.proofpoint.configuration.ConfigBinder.bindConfig;
-import static com.proofpoint.http.client.ServiceTypes.serviceType;
 import static com.proofpoint.http.client.HttpClientBinder.httpClientBinder;
+import static com.proofpoint.http.client.ServiceTypes.serviceType;
 import static com.proofpoint.json.JsonCodecBinder.jsonCodecBinder;
 import static org.weakref.jmx.guice.ExportBinder.newExporter;
 
@@ -62,7 +61,7 @@ public class DiscoveryModule
     @Override
     public Map<String, String> getConfigurationDefaults()
     {
-        return ImmutableMap.of("discovery.http-client.idle-timeout", "5s");
+        return Map.of("discovery.http-client.idle-timeout", "5s");
     }
 
     @Override
@@ -142,7 +141,7 @@ public class DiscoveryModule
                 @ForDiscoveryClient HttpServiceBalancerConfig config)
         {
             if (discoveryBalancer == null) {
-                Map<String, String> tags = ImmutableMap.of("serviceType", "discovery");
+                Map<String, String> tags = Map.of("serviceType", "discovery");
                 discoveryBalancer = new HttpServiceBalancerImpl(
                         "discovery",
                         reportCollectionFactory.createReportCollection(HttpServiceBalancerStats.class, false, "ServiceClient", tags),

@@ -97,7 +97,7 @@ public class ReportCollectionFactory
         requireNonNull(aClass, "class is null");
         return (T) newProxyInstance(aClass.getClassLoader(),
                 new Class[]{aClass},
-                new StatInvocationHandler(aClass, false, Optional.of(aClass.getSimpleName()), ImmutableMap.of()));
+                new StatInvocationHandler(aClass, false, Optional.of(aClass.getSimpleName()), Map.of()));
     }
 
     /**

@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting.testing;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import com.google.inject.Injector;
@@ -34,7 +33,7 @@ import static org.testng.Assert.assertEquals;
 
 public class TestReportingTester
 {
-    private static final ImmutableMap<String, String> TESTING_TAGS = ImmutableMap.of("tag", "tagValue");
+    private static final Map<String, String> TESTING_TAGS = Map.of("tag", "tagValue");
 
     @Test
     public void testTestingReportingClientModule()
@@ -67,7 +66,7 @@ public class TestReportingTester
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
         assertEquals(data, ImmutableTable.builder()
                 .put("TestingMetric.Metric", TESTING_TAGS, 3)
-                .put("ReportCollector.NumMetrics", ImmutableMap.of(), 1)
+                .put("ReportCollector.NumMetrics", Map.of(), 1)
                 .build()
         );
     }
@@ -90,7 +89,7 @@ public class TestReportingTester
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
         assertEquals(data, ImmutableTable.builder()
                 .put("TestApplication.TestingMetric.Metric", TESTING_TAGS, 3)
-                .put("ReportCollector.NumMetrics", ImmutableMap.of(), 1)
+                .put("ReportCollector.NumMetrics", Map.of(), 1)
                 .build()
         );
     }
@@ -114,7 +113,7 @@ public class TestReportingTester
         Table<String, Map<String, String>, Object> data = reportingTester.collectData();
         assertEquals(data, ImmutableTable.<String, Map<String, String>, Object>builder()
                 .put("TestingBucketedMetric.Max", TESTING_TAGS, 3L)
-                .put("ReportCollector.NumMetrics", ImmutableMap.of(), 1)
+                .put("ReportCollector.NumMetrics", Map.of(), 1)
                 .build()
         );
     }

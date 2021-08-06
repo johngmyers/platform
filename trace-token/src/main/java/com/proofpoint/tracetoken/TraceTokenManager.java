@@ -16,7 +16,6 @@
 package com.proofpoint.tracetoken;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
@@ -57,7 +56,7 @@ public final class TraceTokenManager
         if (tokenId == null) {
             return registerTraceToken(null);
         }
-        return registerTraceToken(new TraceToken(ImmutableMap.of("id", tokenId)));
+        return registerTraceToken(new TraceToken(Map.of("id", tokenId)));
     }
 
     /**

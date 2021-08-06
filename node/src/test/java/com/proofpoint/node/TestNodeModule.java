@@ -25,6 +25,8 @@ import com.proofpoint.testing.Assertions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
 public class TestNodeModule
 {
     @Test
@@ -32,7 +34,7 @@ public class TestNodeModule
     {
         long testStartTime = System.currentTimeMillis();
 
-        ConfigurationFactory configFactory = new ConfigurationFactory(ImmutableMap.of("node.environment", "environment"));
+        ConfigurationFactory configFactory = new ConfigurationFactory(Map.of("node.environment", "environment"));
         Injector injector = Guice.createInjector(new NodeModule(), new ConfigurationModule(configFactory), new ApplicationNameModule("test-application"));
         NodeInfo nodeInfo = injector.getInstance(NodeInfo.class);
         Assert.assertNotNull(nodeInfo);

@@ -15,7 +15,6 @@
  */
 package com.proofpoint.discovery.client;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.proofpoint.bootstrap.LifeCycleManager;
@@ -35,6 +34,7 @@ import org.testng.annotations.Test;
 import org.weakref.jmx.testing.TestingMBeanModule;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -76,7 +76,7 @@ public class TestDiscoveryModule
                         new ReportingModule(),
                         new DiscoveryModule()
                 )
-                .setRequiredConfigurationProperties(ImmutableMap.of("testing.discovery.uri", "fake://server"))
+                .setRequiredConfigurationProperties(Map.of("testing.discovery.uri", "fake://server"))
                 .initialize();
 
         // should produce a discovery announcement client and a lookup client
@@ -99,7 +99,7 @@ public class TestDiscoveryModule
                         binder -> discoveryBinder(binder).bindHttpBalancer("foo"),
                         binder -> discoveryBinder(binder).bindHttpBalancer("bar")
                 )
-                .setRequiredConfigurationProperties(ImmutableMap.of("testing.discovery.uri", "fake://server"))
+                .setRequiredConfigurationProperties(Map.of("testing.discovery.uri", "fake://server"))
                 .initialize();
 
         assertThat(injector.getInstance(get(HttpServiceBalancer.class, serviceType("foo")))).isNotNull();
@@ -121,7 +121,7 @@ public class TestDiscoveryModule
                         binder -> discoveryBinder(binder).bindHttpBalancer("foo"),
                         binder -> discoveryBinder(binder).bindHttpBalancer("bar")
                 )
-                .setRequiredConfigurationProperties(ImmutableMap.of(
+                .setRequiredConfigurationProperties(Map.of(
                         "service-balancer.foo.uri", "http://127.0.0.1/foo",
                         "service-balancer.bar.uri", "http://127.0.0.1/bar"))
                 .initialize();
@@ -150,7 +150,7 @@ public class TestDiscoveryModule
                         binder -> discoveryBinder(binder).bindHttpBalancer("foo"),
                         binder -> discoveryBinder(binder).bindHttpBalancer("bar")
                 )
-                .setRequiredConfigurationProperties(ImmutableMap.of(
+                .setRequiredConfigurationProperties(Map.of(
                         "testing.discovery.static", "true",
                         "service-balancer.foo.uri", "http://127.0.0.1/foo",
                         "service-balancer.bar.uri", "http://127.0.0.1/bar"))
@@ -233,7 +233,7 @@ public class TestDiscoveryModule
                         }
 
                 )
-                .setRequiredConfigurationProperties(ImmutableMap.of("testing.discovery.uri", "fake://server"))
+                .setRequiredConfigurationProperties(Map.of("testing.discovery.uri", "fake://server"))
                 .initialize();
 
         return injector.getInstance(Announcer.class);

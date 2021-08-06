@@ -15,7 +15,6 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import com.proofpoint.configuration.Config;
 import com.proofpoint.configuration.LegacyConfig;
 
@@ -23,7 +22,7 @@ import java.util.Map;
 
 public class ReportTagConfig
 {
-    private Map<String, String> tags = ImmutableMap.of();
+    private Map<String, String> tags = Map.of();
 
     public Map<String, String> getTags()
     {

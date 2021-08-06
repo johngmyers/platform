@@ -31,7 +31,7 @@ public class TestReportTagConfig
     public void testDefaults()
     {
         assertRecordedDefaults(recordDefaults(ReportTagConfig.class)
-                .setTags(ImmutableMap.of()));
+                .setTags(Map.of()));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class TestReportTagConfig
                 .build();
 
         ReportTagConfig expected = new ReportTagConfig()
-                .setTags(ImmutableMap.of("foo", "bar"));
+                .setTags(Map.of("foo", "bar"));
 
         assertFullMapping(properties, expected);
     }

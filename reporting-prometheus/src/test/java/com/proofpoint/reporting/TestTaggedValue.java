@@ -15,8 +15,9 @@
  */
 package com.proofpoint.reporting;
 
-import com.google.common.collect.ImmutableMap;
 import org.testng.annotations.Test;
+
+import java.util.Map;
 
 import static com.proofpoint.reporting.PrometheusBeanAttribute.ValueAndTimestamp.valueAndTimestamp;
 import static com.proofpoint.reporting.SimplePrometheusValue.simplePrometheusValue;
@@ -28,13 +29,13 @@ public class TestTaggedValue
     @Test
     public void testComparison() {
         comparisonTester()
-                .addLesserGroup(taggedValue(ImmutableMap.of(), valueAndTimestamp(simplePrometheusValue(3), null)),
-                        taggedValue(ImmutableMap.of(), valueAndTimestamp(simplePrometheusValue(4), 3333L)))
-                .addGreaterGroup(taggedValue(ImmutableMap.of("a", "x"), valueAndTimestamp(simplePrometheusValue(1), null)))
-                .addGreaterGroup(taggedValue(ImmutableMap.of("a", "x", "b", "y"), valueAndTimestamp(simplePrometheusValue(1), null)))
-                .addGreaterGroup(taggedValue(ImmutableMap.of("a", "x", "b", "z"), valueAndTimestamp(simplePrometheusValue(1), null)))
-                .addGreaterGroup(taggedValue(ImmutableMap.of("a", "y", "b", "y"), valueAndTimestamp(simplePrometheusValue(1), null)))
-                .addGreaterGroup(taggedValue(ImmutableMap.of("b", "y"), valueAndTimestamp(simplePrometheusValue(1), null)))
+                .addLesserGroup(taggedValue(Map.of(), valueAndTimestamp(simplePrometheusValue(3), null)),
+                        taggedValue(Map.of(), valueAndTimestamp(simplePrometheusValue(4), 3333L)))
+                .addGreaterGroup(taggedValue(Map.of("a", "x"), valueAndTimestamp(simplePrometheusValue(1), null)))
+                .addGreaterGroup(taggedValue(Map.of("a", "x", "b", "y"), valueAndTimestamp(simplePrometheusValue(1), null)))
+                .addGreaterGroup(taggedValue(Map.of("a", "x", "b", "z"), valueAndTimestamp(simplePrometheusValue(1), null)))
+                .addGreaterGroup(taggedValue(Map.of("a", "y", "b", "y"), valueAndTimestamp(simplePrometheusValue(1), null)))
+                .addGreaterGroup(taggedValue(Map.of("b", "y"), valueAndTimestamp(simplePrometheusValue(1), null)))
                 .check();
     }
 }
