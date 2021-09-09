@@ -84,7 +84,7 @@
         <platform.check.fail-modernizer>false</platform.check.fail-modernizer>
 
         <dep.auto-value.version>1.7.4</dep.auto-value.version>
-        <dep.jetty.version>9.4.42.v20210604</dep.jetty.version>
+        <dep.jetty.version>10.0.9</dep.jetty.version>
         <dep.guava.version>31.1-jre</dep.guava.version>
         <dep.guice.version>5.0.1</dep.guice.version>
         <dep.slf4j.version>1.7.36</dep.slf4j.version>
@@ -167,6 +167,7 @@
                                     <!-- Contains FindBugs annotations, JSR-305 and JCIP annotations -->
                                     <exclude>com.google.code.findbugs:annotations</exclude>
                                     <!-- Use the official version at javax.servlet:javax.servlet-api -->
+                                    <exclude>org.eclipse.jetty.toolchain:jetty-servlet-api</exclude>
                                     <exclude>org.eclipse.jetty.orbit:javax.servlet</exclude>
                                     <!-- removed -->
                                     <exclude>com.proofpoint.platform:jmx-http-rpc-experimental</exclude>
@@ -1083,8 +1084,8 @@
                 <version>${dep.jetty.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.eclipse.jetty.orbit</groupId>
-                        <artifactId>javax.servlet</artifactId>
+                        <groupId>org.eclipse.jetty.toolchain</groupId>
+                        <artifactId>jetty-servlet-api</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

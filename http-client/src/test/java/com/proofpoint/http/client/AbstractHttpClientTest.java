@@ -6,6 +6,7 @@ import com.proofpoint.http.client.HttpClient.HttpResponseFuture;
 import com.proofpoint.http.client.StatusResponseHandler.StatusResponse;
 import com.proofpoint.http.client.StringResponseHandler.StringResponse;
 import com.proofpoint.http.client.jetty.JettyHttpClient;
+import com.proofpoint.log.Level;
 import com.proofpoint.log.Logging;
 import com.proofpoint.testing.Assertions;
 import com.proofpoint.testing.Closeables;
@@ -112,7 +113,7 @@ public abstract class AbstractHttpClientTest
     private String host = "127.0.0.1";
     private String keystore = null;
     protected RequestStats stats;
-    private SslContextFactory sslContextFactory;
+    private SslContextFactory.Server sslContextFactory;
 
     protected AbstractHttpClientTest()
     {
@@ -1201,6 +1202,7 @@ public abstract class AbstractHttpClientTest
     public void testConnectNoRead()
             throws Exception
     {
+        Logging.initialize().setLevel("org.eclipse.jetty", Level.DEBUG);
         try (FakeServer fakeServer = new FakeServer(scheme, host, 0, null, false)) {
             HttpClientConfig config = createClientConfig();
             config.setConnectTimeout(new Duration(5, SECONDS));
@@ -1312,7 +1314,7 @@ public abstract class AbstractHttpClientTest
                     // Jetty behavior for HTTP/2 changed in 9.4.12
                     assertGreaterThan(invocation.get(), 0);
                 }
-                assertLessThan(nanosSince(start), new Duration(1, SECONDS), "Expected request to finish quickly");
+                assertLessThan(nanosSince(start), new Duration(3, SECONDS), "Expected request to finish quickly");
             }
         }
     }
@@ -1391,7 +1393,7 @@ public abstract class AbstractHttpClientTest
             executeRequest(config, request, new ExceptionResponseHandler());
         }
         finally {
-            assertLessThan(nanosSince(start), new Duration(1, SECONDS), "Expected request to finish quickly");
+            assertLessThan(nanosSince(start), new Duration(3, SECONDS), "Expected request to finish quickly");
         }
     }
 
