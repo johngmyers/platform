@@ -89,9 +89,9 @@
         <dep.guice.version>5.0.1</dep.guice.version>
         <dep.slf4j.version>1.7.30</dep.slf4j.version>
         <dep.logback.version>1.2.3</dep.logback.version>
-        <dep.javax-servlet.version>3.1.0</dep.javax-servlet.version>
+        <dep.jakarta-servlet.version>5.0.0</dep.jakarta-servlet.version>
         <dep.jackson.version>2.12.2</dep.jackson.version>
-        <dep.jersey.version>2.27</dep.jersey.version>
+        <dep.jersey.version>3.0.3</dep.jersey.version>
         <dep.jmh.version>1.13</dep.jmh.version>
         <dep.jacoco.version>0.8.5</dep.jacoco.version>
         <dep.modernizer.version>2.2.0</dep.modernizer.version>
@@ -166,8 +166,8 @@
                                     <exclude>com.google.guava:guava</exclude>
                                     <!-- Contains FindBugs annotations, JSR-305 and JCIP annotations -->
                                     <exclude>com.google.code.findbugs:annotations</exclude>
-                                    <!-- Use the official version at javax.servlet:javax.servlet-api -->
-                                    <exclude>org.eclipse.jetty.orbit:javax.servlet</exclude>
+                                    <!-- Use the official version at jakarta.servlet:jakarta.servlet-api -->
+                                    <exclude>org.eclipse.jetty.orbit:jakarta.servlet</exclude>
                                     <!-- removed -->
                                     <exclude>com.proofpoint.platform:jmx-http-rpc-experimental</exclude>
                                     <!-- renamed Platform modules -->
@@ -822,9 +822,9 @@
                 <version>1</version>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${dep.javax-servlet.version}</version>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${dep.jakarta-servlet.version}</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.validation</groupId>
@@ -888,9 +888,9 @@
 
             <!-- jersey -->
             <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>javax.ws.rs-api</artifactId>
-                <version>2.1</version>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>3.0.0</version>
             </dependency>
 
             <dependency>
@@ -1090,7 +1090,7 @@
                 <exclusions>
                     <exclusion>
                         <groupId>org.eclipse.jetty.orbit</groupId>
-                        <artifactId>javax.servlet</artifactId>
+                        <artifactId>jakarta.servlet</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
