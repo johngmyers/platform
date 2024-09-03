@@ -1,3 +1,8 @@
+Platform 3.27
+
+* Maven plugin upgrades
+  - JaCoCo to 0.8.12 (was 0.8.8)
+
 Platform 3.24
 
 * Library Upgrades
