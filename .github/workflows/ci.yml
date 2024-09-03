@@ -13,6 +13,7 @@ jobs:
         java:
           - '11'
           - '17'
+          - '21'
     name: Java ${{ matrix.Java }}
     steps:
       - uses: actions/checkout@v2
