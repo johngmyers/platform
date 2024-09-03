@@ -1,5 +1,9 @@
 Platform 3.27
 
+* Library Upgrades
+
+  - cglib to 3.3.0 (was 3.2.8)
+
 * Maven plugin upgrades
   - JaCoCo to 0.8.12 (was 0.8.8)
 
