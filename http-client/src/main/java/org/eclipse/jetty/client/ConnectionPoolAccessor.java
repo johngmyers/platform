@@ -1,6 +1,6 @@
 package org.eclipse.jetty.client;
 
-import org.eclipse.jetty.client.api.Connection;
+import org.eclipse.jetty.client.Connection;
 
 import java.util.Collection;
 

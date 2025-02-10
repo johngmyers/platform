@@ -23,14 +23,13 @@ import org.eclipse.jetty.server.Response;
 import javax.net.ssl.SSLSession;
 import java.util.concurrent.TimeUnit;
 
+import static com.proofpoint.http.server.RequestLogHandler.REQUEST_SSL_SESSION_ATTRIBUTE;
 import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 
 public class StatsRecordingHandler
         implements RequestLog
 {
-    private static final String REQUEST_SSL_SESSION_ATTRIBUTE = "org.eclipse.jetty.servlet.request.ssl_session";
-
     private final RequestStats stats;
     private final DetailedRequestStats detailedRequestStats;
 
@@ -43,10 +42,10 @@ public class StatsRecordingHandler
     @Override
     public void log(Request request, Response response)
     {
-        Duration requestTime = new Duration(max(0, System.currentTimeMillis() - request.getTimeStamp()), TimeUnit.MILLISECONDS);
+        Duration requestTime = new Duration(max(0, System.currentTimeMillis() - Request.getTimeStamp(request)), TimeUnit.MILLISECONDS);
         SSLSession sslSession = (SSLSession) request.getAttribute(REQUEST_SSL_SESSION_ATTRIBUTE);
 
-        stats.record(request.getContentRead(), response.getContentCount(), requestTime);
+        stats.record(Request.getContentBytesRead(request), Response.getContentBytesWritten(response), requestTime);
         detailedRequestStats.requestTimeByCode(response.getStatus(), response.getStatus() / 100).add(requestTime);
 
         if (sslSession != null) {
