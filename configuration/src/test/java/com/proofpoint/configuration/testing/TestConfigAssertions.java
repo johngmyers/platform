@@ -604,64 +604,64 @@ public class TestConfigAssertions
         assertLegacyEquivalence(MapConfig.class, currentProperties, oldProperties, olderProperties);
     }
 
-    public static class PersonConfig
+    static class PersonConfig
     {
         private String name = "Dain";
         private String email = "dain@proofpoint.com";
         private String phone;
         private URI homePage = URI.create("http://iq80.com");
 
-        public String getName()
+        String getName()
         {
             return name;
         }
 
         @Config("name")
-        public PersonConfig setName(String name)
+        PersonConfig setName(String name)
         {
             this.name = name;
             return this;
         }
 
-        public String getEmail()
+        String getEmail()
         {
             return email;
         }
 
         @Config("email")
         @LegacyConfig({"exchange-id", "notes-id"})
-        public PersonConfig setEmail(String email)
+        PersonConfig setEmail(String email)
         {
             this.email = email;
             return this;
         }
 
-        public String getPhone()
+        String getPhone()
         {
             return phone;
         }
 
         @Config("phone")
-        public PersonConfig setPhone(String phone)
+        PersonConfig setPhone(String phone)
         {
             this.phone = phone;
             return this;
         }
 
-        public URI getHomePage()
+        URI getHomePage()
         {
             return homePage;
         }
 
         @Config("home-page")
-        public PersonConfig setHomePage(URI homePage)
+        PersonConfig setHomePage(URI homePage)
         {
             this.homePage = homePage;
             return this;
         }
 
         @LegacyConfig(value = "home-page-url", replacedBy = "home-page")
-        public PersonConfig setHomePageUrl(URL homePage)
+        PersonConfig setHomePageUrl(URL homePage)
         {
             try {
                 this.homePage = homePage.toURI();
