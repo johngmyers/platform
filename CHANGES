@@ -6,6 +6,10 @@ Platform 3.27
 
   * We now support Java 21.
 
+* HTTP Client
+
+  We added 429 to the list of HTTP status codes that allow retrying requests.
+
 * Configuration
 
   - In order to support newer versions of Java,
