@@ -40,6 +40,7 @@
         <dependency>
             <groupId>com.proofpoint.platform</groupId>
             <artifactId>discovery</artifactId>
+            <optional>true</optional>
             <exclusions>
                 <!-- only the announcement interface is used, not the client -->
                 <exclusion>

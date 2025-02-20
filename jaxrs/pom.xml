@@ -243,6 +243,12 @@
 
         <dependency>
             <groupId>com.proofpoint.platform</groupId>
+            <artifactId>discovery</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.proofpoint.platform</groupId>
             <artifactId>http-client</artifactId>
             <scope>test</scope>
         </dependency>
