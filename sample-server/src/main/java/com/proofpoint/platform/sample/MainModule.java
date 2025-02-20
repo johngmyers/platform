@@ -43,8 +43,6 @@ public class MainModule
         jaxrsBinder(binder).bind(PersonResource.class).withApplicationPrefix();
 
         bindConfig(binder).bind(StoreConfig.class);
-
-        discoveryBinder(binder).bindHttpAnnouncement("person");
     }
 
     @Provides
