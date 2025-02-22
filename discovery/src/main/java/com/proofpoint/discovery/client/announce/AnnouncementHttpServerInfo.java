@@ -15,22 +15,11 @@
  */
 package com.proofpoint.discovery.client.announce;
 
-import jakarta.annotation.Nullable;
-
-import java.net.URI;
-
+/**
+ * @deprecated Use {@link com.proofpoint.http.server.announce.AnnouncementHttpServerInfo}
+ */
+@Deprecated
 public interface AnnouncementHttpServerInfo
+        extends com.proofpoint.http.server.announce.AnnouncementHttpServerInfo
 {
-    @Nullable
-    URI getHttpUri();
-    @Nullable
-    URI getHttpExternalUri();
-
-    @Nullable
-    URI getHttpsUri();
-
-    @Nullable
-    default URI getAdminUri() {
-        return null;
-    }
 }

@@ -729,6 +729,12 @@
 
             <dependency>
                 <groupId>com.proofpoint.platform</groupId>
+                <artifactId>http-server-info</artifactId>
+                <version>3.28-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.proofpoint.platform</groupId>
                 <artifactId>http-client</artifactId>
                 <version>3.28-SNAPSHOT</version>
             </dependency>

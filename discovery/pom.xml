@@ -43,6 +43,11 @@
 
         <dependency>
             <groupId>com.proofpoint.platform</groupId>
+            <artifactId>http-server-info</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.proofpoint.platform</groupId>
             <artifactId>json</artifactId>
         </dependency>
 

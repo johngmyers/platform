@@ -89,6 +89,7 @@
         <module>json</module>
         <module>http-client</module>
         <module>http-server</module>
+        <module>http-server-info</module>
         <module>jaxrs</module>
         <module>jmx</module>
         <module>jmx-http</module>
