@@ -1,3 +1,5 @@
+  - maven-surefire-plugin to 3.5.2 (was 2.22.2)
+
 Platform 3.28
 
 * HTTP Server
