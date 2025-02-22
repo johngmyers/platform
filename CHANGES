@@ -32,6 +32,7 @@ Platform 3.28
   - maven-release-plugin to 3.1.1 (was 2.5.3)
   - maven-javadoc-plugin to 3.11.2 (was 3.2.0)
   - maven-jar-plugin to 3.4.2 (was 3.2.0)
+  - maven-source-plugin to 3.3.1 (was 3.2.1)
 
 Platform 3.27
 
