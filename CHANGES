@@ -7,6 +7,7 @@ Platform 3.29
   - maven-site-plugin to 3.21.0 (was 3.9.1)
   - maven-gpg-plugin to 3.2.7 (was 1.6)
   - docker-maven-plugin to 0.45.1 (was 0.43.0)
+  - maven-source-plugin to 3.3.1 (was 3.2.1)
 
 Platform 3.28
 
