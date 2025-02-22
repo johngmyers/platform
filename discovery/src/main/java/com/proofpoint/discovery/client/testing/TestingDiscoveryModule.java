@@ -19,10 +19,12 @@ import com.google.inject.Binder;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
+import com.proofpoint.discovery.client.AdaptingAnnouncementHttpServerInfoProvider;
 import com.proofpoint.discovery.client.DiscoveryExecutorProvider;
 import com.proofpoint.discovery.client.DiscoveryLookupClient;
 import com.proofpoint.discovery.client.ForDiscoveryClient;
 import com.proofpoint.discovery.client.ServiceSelectorFactory;
+import com.proofpoint.discovery.client.announce.AnnouncementHttpServerInfo;
 import com.proofpoint.discovery.client.announce.Announcer;
 import com.proofpoint.discovery.client.announce.DiscoveryAnnouncementClient;
 import com.proofpoint.discovery.client.announce.NullAnnouncer;
@@ -41,6 +43,8 @@ public class TestingDiscoveryModule
     {
         binder.disableCircularProxies();
         binder.requireExplicitBindings();
+
+        binder.bind(AnnouncementHttpServerInfo.class).toProvider(AdaptingAnnouncementHttpServerInfoProvider.class);
 
         // bind discovery client and dependencies
         binder.bind(InMemoryDiscoveryClient.class).in(Scopes.SINGLETON);

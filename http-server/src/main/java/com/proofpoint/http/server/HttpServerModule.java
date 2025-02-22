@@ -18,8 +18,8 @@ package com.proofpoint.http.server;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
-import com.proofpoint.discovery.client.announce.AnnouncementHttpServerInfo;
 import com.proofpoint.http.server.HttpServerBinder.HttpResourceBinding;
+import com.proofpoint.http.server.announce.AnnouncementHttpServerInfo;
 import jakarta.servlet.Filter;
 import org.eclipse.jetty.ee10.servlet.SessionHandler;
 

@@ -44,18 +44,6 @@
 
         <dependency>
             <groupId>com.proofpoint.platform</groupId>
-            <artifactId>discovery</artifactId>
-            <exclusions>
-                <!-- only the announcement interface is used, not the client -->
-                <exclusion>
-                    <groupId>com.proofpoint.platform</groupId>
-                    <artifactId>http-client</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.proofpoint.platform</groupId>
             <artifactId>node</artifactId>
         </dependency>
 

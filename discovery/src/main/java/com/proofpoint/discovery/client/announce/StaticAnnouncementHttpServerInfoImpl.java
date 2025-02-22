@@ -22,7 +22,7 @@ import java.net.URI;
 import static com.google.common.base.MoreObjects.toStringHelper;
 import static com.google.common.base.Preconditions.checkArgument;
 
-public class StaticAnnouncementHttpServerInfoImpl implements AnnouncementHttpServerInfo
+public class StaticAnnouncementHttpServerInfoImpl implements com.proofpoint.http.server.announce.AnnouncementHttpServerInfo
 {
     private final URI httpUri;
     private final URI httpExternalUri;

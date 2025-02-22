@@ -17,7 +17,6 @@ package com.proofpoint.reporting;
 
 import com.google.inject.Injector;
 import com.proofpoint.bootstrap.LifeCycleManager;
-import com.proofpoint.discovery.client.testing.TestingDiscoveryModule;
 import com.proofpoint.http.client.HttpClient;
 import com.proofpoint.http.client.StringResponseHandler.StringResponse;
 import com.proofpoint.http.client.jetty.JettyHttpClient;
@@ -60,7 +59,6 @@ public class TestLivenessResource
                 .withModules(
                         new TestingNodeModule(),
                         new TestingHttpServerModule(),
-                        new TestingDiscoveryModule(),
                         new JsonModule(),
                         explicitJaxrsModule(),
                         new ReportingModule(),

@@ -19,10 +19,10 @@ import com.google.common.collect.MoreCollectors;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
-import com.proofpoint.discovery.client.announce.AnnouncementHttpServerInfo;
 import com.proofpoint.discovery.client.announce.ServiceAnnouncement;
 import com.proofpoint.discovery.client.announce.StaticAnnouncementHttpServerInfoImpl;
 import com.proofpoint.discovery.client.testing.TestingDiscoveryModule;
+import com.proofpoint.http.server.announce.AnnouncementHttpServerInfo;
 import com.proofpoint.node.testing.TestingNodeModule;
 import com.proofpoint.reporting.ReportingModule;
 import org.testng.annotations.Test;
@@ -102,7 +102,7 @@ public class TestHttpAnnouncementBinder
                 .addProperty("admin", httpServerInfo.getAdminUri().toASCIIString())
                 .build();
 
-        Set<ServiceAnnouncement> announcements = injector.getInstance(Key.get(new TypeLiteral<Set<ServiceAnnouncement>>()
+        Set<ServiceAnnouncement> announcements = injector.getInstance(Key.get(new TypeLiteral<>()
         {
         }));
 
@@ -163,7 +163,7 @@ public class TestHttpAnnouncementBinder
                 .addProperty("https", httpServerInfo.getHttpsUri().toASCIIString())
                 .build();
 
-        Set<ServiceAnnouncement> announcements = injector.getInstance(Key.get(new TypeLiteral<Set<ServiceAnnouncement>>()
+        Set<ServiceAnnouncement> announcements = injector.getInstance(Key.get(new TypeLiteral<>()
         {
         }));
 

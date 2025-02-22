@@ -25,6 +25,7 @@ import com.proofpoint.configuration.AbstractConfigurationAwareModule;
 import com.proofpoint.configuration.Config;
 import com.proofpoint.configuration.ConfigurationDefaultingModule;
 import com.proofpoint.discovery.client.announce.Announcement;
+import com.proofpoint.discovery.client.announce.AnnouncementHttpServerInfo;
 import com.proofpoint.discovery.client.announce.Announcer;
 import com.proofpoint.discovery.client.announce.AnnouncerImpl;
 import com.proofpoint.discovery.client.announce.DiscoveryAnnouncementClient;
@@ -64,6 +65,8 @@ public class DiscoveryModule
     @SuppressWarnings("deprecation")
     public void setup(Binder binder)
     {
+        binder.bind(AnnouncementHttpServerInfo.class).toProvider(AdaptingAnnouncementHttpServerInfoProvider.class);
+
         if (buildConfigObject(DiscoveryClientConfig.class).isDiscoveryStatic()) {
             binder.install(new StaticDiscoveryModule());
             binder.bind(Announcer.class).to(NullAnnouncer.class).in(Scopes.SINGLETON);

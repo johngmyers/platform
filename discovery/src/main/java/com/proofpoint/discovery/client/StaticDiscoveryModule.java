@@ -17,7 +17,9 @@ package com.proofpoint.discovery.client;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import com.google.inject.Provides;
 import com.google.inject.Scopes;
+import com.proofpoint.discovery.client.announce.AnnouncementHttpServerInfo;
 import com.proofpoint.discovery.client.announce.Announcer;
 import com.proofpoint.discovery.client.balancing.StaticHttpServiceBalancerFactory;
 import com.proofpoint.http.client.balancing.BalancingHttpClient;
@@ -35,8 +37,10 @@ public class StaticDiscoveryModule
         implements Module
 {
     @Override
+    @SuppressWarnings("deprecation")
     public void configure(Binder binder)
     {
+        binder.bind(AnnouncementHttpServerInfo.class).toProvider(AdaptingAnnouncementHttpServerInfoProvider.class);
         binder.bind(StaticHttpServiceBalancerFactory.class).in(Scopes.SINGLETON);
     }
 }
