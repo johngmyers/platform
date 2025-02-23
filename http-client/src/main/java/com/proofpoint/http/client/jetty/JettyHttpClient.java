@@ -484,10 +484,10 @@ public class JettyHttpClient
 
         JettyResponseFuture<T, E> future = new JettyResponseFuture<>(this, request, jettyRequest, responseHandler, bytesWritten, stats);
 
-        BufferingResponseListener listener = new BufferingResponseListener(future, Ints.saturatedCast(maxContentLength));
+        JettyResponseListener<T, E> listener = new JettyResponseListener<>(jettyRequest, future, Ints.saturatedCast(maxContentLength));
 
         try {
-            jettyRequest.send(listener);
+            return listener.send();
         }
         catch (RuntimeException e) {
             if (!(e instanceof RejectedExecutionException)) {
@@ -495,8 +495,8 @@ public class JettyHttpClient
             }
             // normally this is a rejected execution exception because the client has been closed
             future.failed(e);
+            return future;
         }
-        return future;
     }
 
     private Request applyRequestFilters(Request request)
