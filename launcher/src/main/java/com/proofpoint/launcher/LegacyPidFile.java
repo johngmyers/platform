@@ -15,6 +15,8 @@
  */
 package com.proofpoint.launcher;
 
+import org.gaul.modernizer_maven_annotations.SuppressModernizer;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,10 +37,10 @@ public class LegacyPidFile implements PidStatusSource
     }
 
     @Override
+    @SuppressModernizer
     public PidStatus getStatus()
     {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(pidFilePath), US_ASCII)))
-        {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(pidFilePath), US_ASCII))) {
             String line = reader.readLine();
             if (line != null) {
                 int pid = Integer.decode(line);

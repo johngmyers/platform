@@ -53,6 +53,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.LogRecord;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Multimaps.synchronizedMultimap;
@@ -294,6 +295,12 @@ public class Logging
         setLevel(ROOT_LOGGER_NAME, newLevel);
     }
 
+    public void setLevels(Path path)
+            throws IOException
+    {
+        setLevels(new PropertiesBuilder().withPropertiesFile(path.toString()).throwOnError().getProperties());
+    }
+
     public void setLevels(File file)
             throws IOException
     {
@@ -357,20 +364,23 @@ public class Logging
         // These .tmp files are log files that are about to be compressed.
         // This method recovers them so that they aren't orphaned.
 
-        File logPathFile = new File(logPath).getParentFile();
-        File[] tempFiles = logPathFile.listFiles((dir, name) -> name.endsWith(TEMP_FILE_EXTENSION));
-
-        if (tempFiles == null) {
-            return;
+        Path logPathParent = Path.of(logPath).getParent();
+        try (Stream<Path> stream = Files.list(logPathParent)) {
+            stream.filter(path -> path.toString().endsWith(TEMP_FILE_EXTENSION))
+                    .forEach(path -> {
+                        String pathString = path.toString();
+                        String newName = pathString.substring(0, pathString.length() - TEMP_FILE_EXTENSION.length());
+                        Path newPath = Path.of(newName + LOG_FILE_EXTENSION);
+                        try {
+                            Files.move(path, newPath);
+                        }
+                        catch (IOException ex) {
+                            log.warn("Could not rename temp file [%s] to [%s]", path, newPath);
+                        }
+                    });
         }
-
-        for (File tempFile : tempFiles) {
-            String newName = tempFile.getName().substring(0, tempFile.getName().length() - TEMP_FILE_EXTENSION.length());
-            File newFile = new File(tempFile.getParent(), newName + LOG_FILE_EXTENSION);
-
-            if (!tempFile.renameTo(newFile)) {
-                log.warn("Could not rename temp file [%s] to [%s]", tempFile, newFile);
-            }
+        catch (IOException e) {
+            // ignore
         }
     }
 
@@ -390,7 +400,7 @@ public class Logging
         }
 
         if (config.getLevelsFile() != null) {
-            setLevels(new File(config.getLevelsFile()));
+            setLevels(Path.of(config.getLevelsFile()));
         }
 
         if (config.getBootstrapLogPath() != null) {
@@ -401,7 +411,7 @@ public class Logging
     private static void setupBootstrapLog(String logPath)
             throws IOException
     {
-        Path path = Paths.get(logPath);
+        Path path = Path.of(logPath);
         Path parent = path.getParent();
         if (parent != null) {
             Files.createDirectories(parent);

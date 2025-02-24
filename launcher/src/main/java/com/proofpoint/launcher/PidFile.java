@@ -16,6 +16,7 @@
 package com.proofpoint.launcher;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.gaul.modernizer_maven_annotations.SuppressModernizer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,6 +48,7 @@ class PidFile implements PidStatusSource
     private FileLock runningLock = null;
     private FileLock notYetRunningLock = null;
 
+    @SuppressModernizer
     PidFile(String pidFilePath)
     {
         requireNonNull(pidFilePath, "pidFilePath is null");

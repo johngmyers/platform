@@ -25,6 +25,7 @@ import com.github.rvesse.airline.parser.errors.ParseException;
 import com.google.common.base.Joiner;
 import com.proofpoint.configuration.PropertiesBuilder;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.gaul.modernizer_maven_annotations.SuppressModernizer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -148,6 +149,7 @@ public final class Main
         final List<String> launcherArgs = new ArrayList<>();
         private int stopTimeoutSeconds = 60;
 
+        @SuppressModernizer
         LauncherCommand()
         {
             URL launcherResource = Main.class.getProtectionDomain().getCodeSource().getLocation();
@@ -167,6 +169,7 @@ public final class Main
 
         // Copies default truststore to accessable path. Adds k8s ca root cert to truststore. Returns path of new truststore or null
         @SuppressFBWarnings("DMI_HARDCODED_ABSOLUTE_FILENAME")
+        @SuppressModernizer
         private String addKubernetesToTrustStore()
         {
             File certFile = new File("/var/run/secrets/kubernetes.io/serviceaccount/ca.crt");
@@ -221,6 +224,7 @@ public final class Main
         abstract void execute();
 
         @Override
+        @SuppressModernizer
         public final void run()
         {
             if (verbose) {
@@ -334,6 +338,7 @@ public final class Main
         }
 
         @SuppressFBWarnings(value = "OS_OPEN_STREAM", justification = "false positive")
+        @SuppressModernizer
         protected void start(List<String> args, boolean daemon)
         {
             if ("root".equals(System.getProperty("user.name"))) {
@@ -568,6 +573,7 @@ public final class Main
         }
 
         @SuppressFBWarnings(value = "OS_OPEN_STREAM", justification = "false positive")
+        @SuppressModernizer
         protected void invokeMain(List<String> args, boolean daemon)
         {
             if (!installPath.equals(dataDir)) {

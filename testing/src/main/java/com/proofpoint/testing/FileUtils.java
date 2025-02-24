@@ -18,6 +18,7 @@ package com.proofpoint.testing;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Files;
 import com.google.common.io.RecursiveDeleteOption;
+import org.gaul.modernizer_maven_annotations.SuppressModernizer;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -31,6 +32,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 //This is a copy from galaxy-server's com.proofpoint.galaxy.shared.FileUtils
+@SuppressModernizer
 public class FileUtils
 {
     private static final int TEMP_DIR_ATTEMPTS = 10000;

@@ -15,17 +15,17 @@
  */
 package com.proofpoint.log;
 
-import com.google.common.io.Files;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.io.Files.createTempDir;
 import static com.google.common.io.MoreFiles.deleteRecursively;
 import static com.google.common.io.RecursiveDeleteOption.ALLOW_INSECURE;
 import static org.testng.Assert.assertEquals;
@@ -35,19 +35,20 @@ import static org.testng.Assert.fail;
 
 public class TestLogging
 {
-    private File tempDir;
+    private Path tempPath;
 
     @BeforeMethod
     public void setup()
+            throws IOException
     {
-        tempDir = createTempDir();
+        tempPath = Files.createTempDirectory(null);
     }
 
     @AfterMethod
     public void tearDown()
             throws IOException
     {
-        deleteRecursively(tempDir.toPath(), ALLOW_INSECURE);
+        deleteRecursively(tempPath, ALLOW_INSECURE);
     }
 
     @Test
@@ -55,27 +56,27 @@ public class TestLogging
             throws IOException
     {
         LoggingConfiguration configuration = new LoggingConfiguration();
-        configuration.setLogPath(new File(tempDir, "launcher.log").getPath());
+        configuration.setLogPath(tempPath.resolve("launcher.log").toString());
 
-        File logFile1 = new File(tempDir, "test1.log");
-        Files.touch(logFile1);
-        File logFile2 = new File(tempDir, "test2.log");
-        Files.touch(logFile2);
-        File tempLogFile1 = new File(tempDir, "temp1.tmp");
-        Files.touch(tempLogFile1);
-        File tempLogFile2 = new File(tempDir, "temp2.tmp");
-        Files.touch(tempLogFile2);
+        Path logPath1 = tempPath.resolve("test1.log");
+        Files.write(logPath1, new byte[]{});
+        Path logPath2 = tempPath.resolve("test2.log");
+        Files.write(logPath2, new byte[]{});
+        Path tempLogPath1 = tempPath.resolve("temp1.tmp");
+        Files.write(tempLogPath1, new byte[]{});
+        Path tempLogPath2 = tempPath.resolve("temp2.tmp");
+        Files.write(tempLogPath2, new byte[]{});
 
         Logging logging = Logging.initialize();
         logging.configure(configuration);
 
-        assertTrue(logFile1.exists());
-        assertTrue(logFile2.exists());
-        assertFalse(tempLogFile1.exists());
-        assertFalse(tempLogFile2.exists());
+        assertTrue(Files.exists(logPath1));
+        assertTrue(Files.exists(logPath2));
+        assertFalse(Files.exists(tempLogPath1));
+        assertFalse(Files.exists(tempLogPath2));
 
-        assertTrue(new File(tempDir, "temp1.log").exists());
-        assertTrue(new File(tempDir, "temp2.log").exists());
+        assertTrue(Files.exists(tempPath.resolve("temp1.log")));
+        assertTrue(Files.exists(tempPath.resolve("temp2.log")));
     }
 
     @Test
@@ -179,7 +180,7 @@ public class TestLogging
         Exception testingException = new Exception();
         Logging.addLogTester(TestAddLogTesterThrown.class, (level, message, thrown) -> {
             assertEquals(level, Level.WARN);
-            assertEquals(thrown.get(), testingException);
+            assertEquals(thrown.orElseThrow(), testingException);
             logRecords.add(message);
         });
         Logger.get(TestAddLogTesterThrown.class).warn(testingException, "test log line");

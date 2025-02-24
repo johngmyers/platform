@@ -23,11 +23,11 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.google.common.collect.ImmutableMap;
 import jakarta.annotation.Nullable;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,6 +40,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import static java.lang.String.format;
+import static java.nio.file.Files.newInputStream;
 
 public class PropertiesBuilder
 {
@@ -64,7 +65,7 @@ public class PropertiesBuilder
         ObjectMapper mapper = new ObjectMapper(new JsonFactory()).enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
         JsonNode tree = null;
         try {
-            tree = mapper.readTree(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8));
+            tree = mapper.readTree(new InputStreamReader(newInputStream(Path.of(path)), StandardCharsets.UTF_8));
         }
         catch (MismatchedInputException e) {
             errors.add(e.getMessage());
@@ -136,7 +137,7 @@ public class PropertiesBuilder
             }
         };
 
-        try (Reader reader = new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8)) {
+        try (Reader reader = new InputStreamReader(newInputStream(Path.of(path)), StandardCharsets.UTF_8)) {
             properties.load(reader);
         }
 

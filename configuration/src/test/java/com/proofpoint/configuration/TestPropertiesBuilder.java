@@ -22,7 +22,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -33,6 +32,7 @@ import java.util.Set;
 import static com.google.common.io.MoreFiles.deleteRecursively;
 import static com.google.common.io.RecursiveDeleteOption.ALLOW_INSECURE;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.newOutputStream;
 import static org.testng.Assert.assertEquals;
 
 public class TestPropertiesBuilder
@@ -90,7 +90,7 @@ public class TestPropertiesBuilder
             throws IOException
     {
         File file = File.createTempFile("config", ".properties", tempDir);
-        try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
+        try (PrintStream out = new PrintStream(newOutputStream(file.toPath()))) {
             out.println("key1: original");
             out.println("key2: original");
         }
@@ -110,7 +110,7 @@ public class TestPropertiesBuilder
             throws IOException
     {
         File file = File.createTempFile("config", ".properties", tempDir);
-        try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
+        try (PrintStream out = new PrintStream(newOutputStream(file.toPath()))) {
             out.print("string-value: foo\n");
             out.print("string-value: foo");
         }
@@ -175,7 +175,7 @@ public class TestPropertiesBuilder
             throws IOException
     {
         final File file = File.createTempFile("config", ".json", tempDir);
-        try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
+        try (PrintStream out = new PrintStream(newOutputStream(file.toPath()))) {
             out.print("{\n" +
                     "\"string.value\": \"foo\",\n" +
                     "\"string.value\": \"foo\"}\n" +
@@ -193,7 +193,7 @@ public class TestPropertiesBuilder
             throws IOException
     {
         final File file = File.createTempFile("config", ".json", tempDir);
-        try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
+        try (PrintStream out = new PrintStream(newOutputStream(file.toPath()))) {
             out.print("{\n" +
                     "\"string.value\": \"foo\",\n" +
                     "\"string\": {\"value\": \"foo\"}\n" +
@@ -211,11 +211,11 @@ public class TestPropertiesBuilder
             throws IOException
     {
         File file = File.createTempFile("config", ".json", tempDir);
-        try (PrintStream out = new PrintStream(new FileOutputStream(file))) {
+        try (PrintStream out = new PrintStream(newOutputStream(file.toPath()))) {
             out.print("{\"string\": \"foo\"}");
         }
         File secondFile = File.createTempFile("config", ".json", tempDir);
-        try (PrintStream out = new PrintStream(new FileOutputStream(secondFile))) {
+        try (PrintStream out = new PrintStream(newOutputStream(secondFile.toPath()))) {
             out.print("{\"string\": \"foo\"}");
         }
 

@@ -19,6 +19,7 @@ import jnr.constants.platform.Errno;
 import jnr.posix.POSIX;
 import jnr.posix.POSIXFactory;
 import jnr.posix.POSIXHandler;
+import org.gaul.modernizer_maven_annotations.SuppressModernizer;
 import sun.misc.Signal;
 
 import java.io.File;
@@ -34,6 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressModernizer
 class Processes
 {
     private static final OurPOSIXHandler posixHandler = new OurPOSIXHandler();
@@ -107,6 +109,7 @@ class Processes
         private static final POSIX instance = POSIXFactory.getNativePOSIX(posixHandler);
     }
 
+    @SuppressModernizer
     private static final class OurPOSIXHandler implements POSIXHandler
     {
         private final AtomicBoolean verbose = new AtomicBoolean(false);

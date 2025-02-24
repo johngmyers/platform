@@ -44,9 +44,10 @@ import com.proofpoint.log.LoggingConfiguration;
 import com.proofpoint.node.ApplicationNameModule;
 import com.proofpoint.node.NodeInfo;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +57,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
@@ -105,7 +107,7 @@ import static java.util.Objects.requireNonNullElse;
  *       System.exit(1);
  *   }
  * </pre>
- *
+ * <p>
  * The configuration is read from a file specified by the "config" system property.
  *
  * <p>
@@ -169,9 +171,9 @@ public class Bootstrap
     /**
      * Start building an object for starting an application whose name is dependent upon configuration.
      *
-     * @param configClass the configuration class needed to determine the application name
+     * @param configClass             the configuration class needed to determine the application name
      * @param applicationNameFunction the {@link Function} to map from the configuration class
-     * to the lowercase hyphen-separated name of the application
+     *                                to the lowercase hyphen-separated name of the application
      * @return an intermediate object for initializing the application
      */
     public static <T> BootstrapBeforeModules bootstrapApplication(Class<T> configClass, Function<T, String> applicationNameFunction)
@@ -181,7 +183,7 @@ public class Bootstrap
 
     /**
      * Start building an object for starting an application for a unit test.
-     *
+     * <p>
      * Suppresses logging initializing, reading of a configuration file, and verbose logging.
      *
      * @return an intermediate object for initializing the test application
@@ -213,10 +215,10 @@ public class Bootstrap
      * must be consumed by configuration. Suppresses reading a configuration file.
      * Intended for use in unit tests.
      *
-     * @deprecated Use {@link #bootstrapTest()} to bootstrap a unit test.
-     * @param key the name of the configuration property
+     * @param key   the name of the configuration property
      * @param value the value of the configuration property
      * @return the object, for chaining method calls.
+     * @deprecated Use {@link #bootstrapTest()} to bootstrap a unit test.
      */
     @Deprecated
     public Bootstrap setRequiredConfigurationProperty(String key, String value)
@@ -233,9 +235,9 @@ public class Bootstrap
      * All specified properties must be consumed by configuration.  Suppresses
      * reading a configuration file. Intended for use in unit tests.
      *
-     * @deprecated Use {@link #bootstrapTest()} to bootstrap a unit test.
      * @param requiredConfigurationProperties the configuration properties
      * @return the object, for chaining method calls.
+     * @deprecated Use {@link #bootstrapTest()} to bootstrap a unit test.
      */
     @Deprecated
     public Bootstrap setRequiredConfigurationProperties(Map<String, String> requiredConfigurationProperties)
@@ -251,7 +253,7 @@ public class Bootstrap
      * Override the configuration parameter defaults with application-specific
      * values. All specified properties must be consumed by configuration,
      * though the values may be overridden by the application's configuration.
-     *
+     * <p>
      * An application would normally use this to, as a minimum, enable HTTPS
      * by default and specify the application's ports.
      *
@@ -281,7 +283,7 @@ public class Bootstrap
      * Set the policy on Guice implicit bindings.
      *
      * @param requireExplicitBindings true if bindings must be listed in a Module in
-     * order to be injected. Default true.
+     *                                order to be injected. Default true.
      * @return the object, for chaining method calls.
      */
     @SuppressWarnings("unused")
@@ -321,54 +323,54 @@ public class Bootstrap
         }
 
         // initialize configuration
-        ConfigurationFactoryBuilder builder = new ConfigurationFactoryBuilder();
+        final ConfigurationFactoryBuilder[] builder = {new ConfigurationFactoryBuilder()};
         if (!moduleDefaults.isEmpty()) {
-            builder = builder.withModuleDefaults(moduleDefaults, moduleDefaultSource);
+            builder[0] = builder[0].withModuleDefaults(moduleDefaults, moduleDefaultSource);
         }
         if (applicationDefaults != null) {
-            builder = builder.withApplicationDefaults(applicationDefaults);
+            builder[0] = builder[0].withApplicationDefaults(applicationDefaults);
         }
         if (requiredConfigurationProperties == null) {
             String configPropertiesPath = System.getProperty("config");
-            if (configPropertiesPath == null && new File("etc/config/config.json").exists()) {
+            if (configPropertiesPath == null && Files.exists(Path.of("etc/config/config.json"))) {
                 log.info("Loading configuration from etc/config/config.json");
-                builder = builder.withJsonFile("etc/config/config.json");
+                builder[0] = builder[0].withJsonFile("etc/config/config.json");
 
-                File[] jsonConfigFiles = new File("etc").listFiles((FileFilter) file -> {
-                    if (!file.isDirectory() || "config".equals(file.getName()) || file.getName().startsWith(".")) {
-                        return false;
-                    }
-                    File configJsonPath = file.toPath().resolve("config.json").toFile();
-                    return configJsonPath.exists();
-                });
-                if (jsonConfigFiles == null) {
-                    throw new RuntimeException("Could not list directories under etc");
+                try (Stream<Path> stream = Files.list(Path.of("etc"))) {
+                    stream.filter(path ->
+                                    Files.isDirectory(path) &&
+                                            !"config".equals(path.getFileName().toString()) &&
+                                            !path.getFileName().toString().startsWith(".") &&
+                                            path.resolve("config.json").toFile().exists())
+                            .forEach(path -> {
+                                builder[0] = builder[0].withJsonFile(path.resolve("config.json").toString());
+                            });
                 }
-                for (File jsonConfigFile : jsonConfigFiles) {
-                    builder = builder.withJsonFile(jsonConfigFile.toPath().resolve("config.json").toString());
+                catch (IOException e) {
+                    throw new RuntimeException("Could not list directories under etc", e);
                 }
             }
             else {
                 configPropertiesPath = requireNonNullElse(configPropertiesPath, "etc/config.properties");
                 log.info("Loading configuration from %s", configPropertiesPath);
-                builder = builder.withFile(configPropertiesPath);
+                builder[0] = builder[0].withFile(configPropertiesPath);
 
                 String secretsConfigPath = System.getProperty("secrets-config");
-                if (secretsConfigPath == null && new File("etc/secrets.properties").exists()) {
+                if (secretsConfigPath == null && Files.exists(Path.of("etc/secrets.properties"))) {
                     secretsConfigPath = "etc/secrets.properties";
                 }
                 if (secretsConfigPath != null) {
-                    builder = builder.withFile(secretsConfigPath);
+                    builder[0] = builder[0].withFile(secretsConfigPath);
                 }
             }
-            builder = builder.withSystemProperties();
+            builder[0] = builder[0].withSystemProperties();
         }
         else {
-            builder = builder.withRequiredProperties(requiredConfigurationProperties);
+            builder[0] = builder[0].withRequiredProperties(requiredConfigurationProperties);
         }
         WarningLoggingMonitor warningsMonitor = new WarningLoggingMonitor();
-        builder = builder.withWarningsMonitor(warningsMonitor);
-        ConfigurationFactory configurationFactory = builder.build();
+        builder[0] = builder[0].withWarningsMonitor(warningsMonitor);
+        ConfigurationFactory configurationFactory = builder[0].build();
 
         if (logging != null) {
             // initialize logging
@@ -377,11 +379,11 @@ public class Bootstrap
             logging.configure(configuration);
 
             if (configuration.getLevelsFile() == null) {
-                if (new File("etc/config/log.json").exists()) {
+                if (Files.exists(Path.of("etc/config/log.json"))) {
                     logging.setLevels(new PropertiesBuilder().withJsonFile("etc/config/log.json").throwOnError().getProperties());
                 }
-                else if (new File("etc/log.properties").exists()) {
-                    logging.setLevels(new File("etc/log.properties"));
+                else if (Files.exists(Path.of("etc/log.properties"))) {
+                    logging.setLevels(Path.of("etc/log.properties"));
                 }
             }
         }
@@ -597,7 +599,7 @@ public class Bootstrap
          * Set a configuration property for use by the application's configuration. The property
          * must be consumed by configuration.
          *
-         * @param key the name of the configuration property
+         * @param key   the name of the configuration property
          * @param value the value of the configuration property
          * @return the object, for chaining method calls.
          */
@@ -644,7 +646,7 @@ public class Bootstrap
          * configuration.
          *
          * @param requireExplicitBindings true if properties in configuration
-         * files must be consumed. Default true.
+         *                                files must be consumed. Default true.
          * @return the object, for chaining method calls.
          */
         public UnitTestBootstrap requireExplicitBindings(boolean requireExplicitBindings)
